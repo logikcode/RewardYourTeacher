@@ -15,7 +15,7 @@ import java.util.List;
 public class Teacher extends User{
 
 
-    private String NIN;
+//    private String NIN;
     private String schoolType;
     private int yearsOfTeaching;
     private boolean isRetired;

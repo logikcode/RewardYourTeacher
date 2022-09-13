@@ -4,17 +4,24 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Messaging {
+public class Message {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private Teacher teacher;
-    private Student student;
+
+    private String message;
+
+    private Long teacher_id;
+
+    private Long student_id;
+
     private Notification notification;
 
 
