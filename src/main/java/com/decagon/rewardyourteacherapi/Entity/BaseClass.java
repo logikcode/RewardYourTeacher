@@ -9,6 +9,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -17,7 +18,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @MappedSuperclass
-public abstract class BaseClass {
+public abstract class BaseClass implements Serializable {
 
     @Id
     private String id = UUID.randomUUID().toString();
