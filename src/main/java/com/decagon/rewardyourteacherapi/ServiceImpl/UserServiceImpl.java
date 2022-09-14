@@ -75,6 +75,7 @@ public class UserServiceImpl implements UserService {
             student.setEmail(studentDto.getEmail());
             student.setPassword(passwordEncoder.encode(studentDto.getPassword()));
             student.setSchool(studentDto.getSchool());
+            student.setRole(Roles.STUDENT);
 
             userRepository.save(student);
 
