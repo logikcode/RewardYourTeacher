@@ -28,7 +28,7 @@ import java.util.Objects;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "user_type")
 @Table(name = "users")
-public class User extends BaseClass implements Serializable {
+public class User extends BaseClass {
 
     @Column(name = "name", nullable = false)
     private String name;

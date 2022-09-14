@@ -2,10 +2,7 @@ package com.decagon.rewardyourteacherapi.Entity;
 
 import javax.persistence.*;
 @Entity
-public class Subjects {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+public class Subjects extends BaseClass{
 
     private String title;
 
