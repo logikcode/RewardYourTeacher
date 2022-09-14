@@ -1,12 +1,11 @@
 package com.decagon.rewardyourteacherapi.Entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -19,6 +18,10 @@ public class School {
 
 
     @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
+    @JoinColumn(name = "teacher_id", referencedColumnName = "id")
+    private Teacher teacher;
+
+    @OneToOne
+    @JoinColumn(name = "student_id", referencedColumnName = "id")
+    private Student student;
 }

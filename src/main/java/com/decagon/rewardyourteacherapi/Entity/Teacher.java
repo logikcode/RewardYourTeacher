@@ -1,24 +1,24 @@
 package com.decagon.rewardyourteacherapi.Entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import com.decagon.rewardyourteacherapi.enums.SchoolType;
+import com.decagon.rewardyourteacherapi.enums.TransactionType;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 public class Teacher extends User{
 
-
-//    private String NIN;
-    private String schoolType;
     private int yearsOfTeaching;
     private boolean isRetired;
+
+    @Enumerated(EnumType.STRING)
+    private SchoolType schoolType;
 
     @OneToMany(mappedBy = "teacher")
     private List<Subjects> subjectsList;
@@ -30,4 +30,6 @@ public class Teacher extends User{
     @OneToOne
     @JoinColumn(name = "wallet_id", referencedColumnName = "id")
     private Wallet wallet;
+
+
 }

@@ -1,22 +1,26 @@
 package com.decagon.rewardyourteacherapi.Entity;
 
+import com.decagon.rewardyourteacherapi.enums.TransactionType;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
-public class Transaction {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long uuid;
+public class Transaction extends BaseClass {
 
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-    private Long receiverId;
-    private Long senderId;
+    private String uuid = UUID.randomUUID().toString();
 
+    @Enumerated(EnumType.STRING)
+    private TransactionType transactionType;
+
+    @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "wallet_id", referencedColumnName = "id")
-    private Wallet wallet;
+    @JoinColumn(name = "userId" , referencedColumnName = "id")
+    private User user;
+
+
+
 }
