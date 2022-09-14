@@ -1,45 +1,43 @@
 package com.decagon.rewardyourteacherapi.services;
 
-import com.decagon.rewardyourteacherapi.repository.UserRepository;
+import com.decagon.rewardyourteacherapi.Entity.User;
+import com.decagon.rewardyourteacherapi.Repository.UserRepository;
+import com.decagon.rewardyourteacherapi.enums.Roles;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.Collections;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
-
+    private Roles role;
     public CustomUserDetailsService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     @Override
-    public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-       /* User user = userRepository
-                .findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
+        User user = userRepository
+                .findUserByEmail(email)
                 .orElseThrow(() ->
-                        new UsernameNotFoundException("User not found with username or email:" + usernameOrEmail));
+                        new UsernameNotFoundException("User not found with username or email:" + email));
 
-        return new User( user.getEmail(), user.getPassword(), mapRolesToAuthorities(user.getRoles()));
+         role = user.getRole();
+        return   new org.springframework.security.core.userdetails.User( user.getEmail(), user.getPassword(), mapRoleToAuthority());
     }
 
-    private Collection< ? extends GrantedAuthority> mapRolesToAuthorities(Set<Role> roles){
-        return roles.stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName()))
-                .collect(Collectors.toList());
+    private Collection <? extends GrantedAuthority> mapRoleToAuthority (){
+
+        return Collections.singleton(new SimpleGrantedAuthority(role.toString()));
     }
 
-        */
-        return null;
-    }
 }
+
