@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.function.Function;
 
 @Component
 public class JWTTokenProvider {
@@ -35,6 +36,7 @@ public class JWTTokenProvider {
 
         return token;
     }
+
 
     public String getUsernameFromJwt(String token) {
 
