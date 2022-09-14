@@ -7,11 +7,10 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,10 +20,11 @@ import java.time.LocalDateTime;
 public abstract class BaseClass {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private  Long id;
+    private String id = UUID.randomUUID().toString();
+
     @CreationTimestamp
     private LocalDateTime createDate;
+
     @UpdateTimestamp
     private LocalDateTime updateDate;
 

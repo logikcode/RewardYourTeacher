@@ -23,13 +23,7 @@ public class Teacher extends User{
     @OneToMany(mappedBy = "teacher")
     private List<Subjects> subjectsList;
 
-    @OneToOne
-    @JoinColumn(name = "school_id", referencedColumnName = "id")
-    private School school;
 
-    @OneToOne
-    @JoinColumn(name = "wallet_id", referencedColumnName = "id")
-    private Wallet wallet;
 
 
 }

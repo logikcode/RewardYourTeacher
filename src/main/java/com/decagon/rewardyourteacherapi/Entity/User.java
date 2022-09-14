@@ -3,20 +3,21 @@ package com.decagon.rewardyourteacherapi.Entity;
 import com.decagon.rewardyourteacherapi.enums.Roles;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import javax.management.relation.Role;
+import org.hibernate.Hibernate;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.security.Timestamp;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 @AllArgsConstructor
@@ -28,15 +29,6 @@ import java.util.List;
 @DiscriminatorColumn(name = "user_type")
 @Table(name = "users")
 public class User extends BaseClass implements Serializable {
-    @Id
-    @GeneratedValue(generator = "user_generator")
-    @SequenceGenerator(
-            name = "user_generator",
-            sequenceName = "user_sequence",
-            initialValue = 1000
-    )
-    private Long id;
-
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -53,15 +45,6 @@ public class User extends BaseClass implements Serializable {
     @Column(name = "password", nullable = false, unique = true)
     private String password;
 
-
-
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private Timestamp createdAt;
-
-
-
-    @Column(name = "updated_at", nullable = false)
-    private Timestamp updatedAt;
 
     @Enumerated(EnumType.STRING)
     private Roles role;
@@ -82,5 +65,20 @@ public class User extends BaseClass implements Serializable {
     @JoinColumn(name = "school_Id" , referencedColumnName = "id")
     private School school;
 
+    @OneToOne
+    @JoinColumn(name = "wallet_id", referencedColumnName = "id")
+    private Wallet wallet;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        User user = (User) o;
+        return getId() != null && Objects.equals(getId(), user.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }
