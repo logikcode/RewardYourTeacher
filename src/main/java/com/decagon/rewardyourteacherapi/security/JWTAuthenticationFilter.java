@@ -1,7 +1,7 @@
 
 package com.decagon.rewardyourteacherapi.security;
 
-import com.decagon.rewardyourteacherapi.services.CustomUserDetailsService;
+import com.decagon.rewardyourteacherapi.security.services.CustomUserDetailsService;
 import com.decagon.rewardyourteacherapi.utils.AppConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
