@@ -1,4 +1,4 @@
-package com.decagon.rewardyourteacherapi.Entity;
+package com.decagon.rewardyourteacherapi.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
