@@ -1,4 +1,4 @@
-package com.decagon.rewardyourteacherapi.services;
+package com.decagon.rewardyourteacherapi.security.services;
 
 import com.decagon.rewardyourteacherapi.Entity.User;
 import com.decagon.rewardyourteacherapi.Repository.UserRepository;
