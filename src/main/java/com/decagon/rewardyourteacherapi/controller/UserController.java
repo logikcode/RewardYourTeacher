@@ -1,6 +1,6 @@
-package com.decagon.rewardyourteacherapi.Controller;
+package com.decagon.rewardyourteacherapi.controller;
 
-import com.decagon.rewardyourteacherapi.Service.UserService;
+import com.decagon.rewardyourteacherapi.service.UserService;
 import com.decagon.rewardyourteacherapi.dto.StudentDto;
 import com.decagon.rewardyourteacherapi.dto.TeacherDto;
 import org.springframework.beans.factory.annotation.Autowired;
