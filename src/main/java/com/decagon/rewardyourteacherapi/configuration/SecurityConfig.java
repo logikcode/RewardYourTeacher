@@ -1,4 +1,4 @@
-package com.decagon.rewardyourteacherapi.config;
+package com.decagon.rewardyourteacherapi.configuration;
 
 import com.decagon.rewardyourteacherapi.security.JWTAuthenticationEntryPoint;
 import com.decagon.rewardyourteacherapi.security.JWTAuthenticationFilter;
