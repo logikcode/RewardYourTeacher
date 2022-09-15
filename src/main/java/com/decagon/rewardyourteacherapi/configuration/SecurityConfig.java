@@ -14,6 +14,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.lang.reflect.Method;
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -43,6 +45,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/api/**" ).permitAll()
+                .antMatchers(HttpMethod.POST, "/api/**").permitAll()
                 .antMatchers("/authenticate" , "/teachers-registration" , "/students-registration", "/login").permitAll()
                 .anyRequest()
                 .authenticated();
