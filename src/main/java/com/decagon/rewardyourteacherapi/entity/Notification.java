@@ -5,14 +5,13 @@ import lombok.*;
 
 import javax.persistence.*;
 
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Entity
 @Table(name = "notification")
-public class Notification extends BaseClass { ;
+public class Notification extends BaseClass {
 
     private String messageBody;
     @JsonBackReference

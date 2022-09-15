@@ -1,6 +1,7 @@
 package com.decagon.rewardyourteacherapi.security.services;
 
 import com.decagon.rewardyourteacherapi.entity.User;
+
 import com.decagon.rewardyourteacherapi.enums.Roles;
 import com.decagon.rewardyourteacherapi.repository.UserRepository;
 import org.springframework.security.core.GrantedAuthority;
@@ -28,7 +29,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = userRepository
                 .findUserByEmail(email)
                 .orElseThrow(() ->
-                        new UsernameNotFoundException("User not found with username or email:" + email));
+                        new UsernameNotFoundException("com.decagon.rewardyourteacherapi.entity.User not found with username or email:" + email));
 
          role = user.getRole();
         return   new org.springframework.security.core.userdetails.User( user.getEmail(), user.getPassword(), mapRoleToAuthority());

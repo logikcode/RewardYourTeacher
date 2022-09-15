@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
 
             userRepository.save(teacher);
 
-            return new RegisterTeacherResponse("User Registration successful", LocalDateTime.now(), teacherDto);
+            return new RegisterTeacherResponse("com.decagon.rewardyourteacherapi.entity.User Registration successful", LocalDateTime.now(), teacherDto);
 
         } else {
 
@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserService {
 
             userRepository.save(student);
 
-            return new RegisterStudentResponse("User Registration successful", LocalDateTime.now(), studentDto);
+            return new RegisterStudentResponse("com.decagon.rewardyourteacherapi.entity.User Registration successful", LocalDateTime.now(), studentDto);
         } else {
 
             throw new EmailAlreadyExistsException("Email Already Exists");
