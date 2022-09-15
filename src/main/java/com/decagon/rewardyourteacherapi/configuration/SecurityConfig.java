@@ -48,7 +48,11 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.POST, "/api/**").permitAll()
                 .antMatchers("/authenticate" , "/teachers-registration" , "/students-registration", "/login", "/logout").permitAll()
                 .anyRequest()
-                .authenticated();
+                .authenticated()
+                .and()
+                .logout()
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID");
 
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
