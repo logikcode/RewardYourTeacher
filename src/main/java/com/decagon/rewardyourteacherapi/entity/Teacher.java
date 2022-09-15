@@ -1,7 +1,6 @@
-package com.decagon.rewardyourteacherapi.Entity;
+package com.decagon.rewardyourteacherapi.entity;
 
 import com.decagon.rewardyourteacherapi.enums.SchoolType;
-import com.decagon.rewardyourteacherapi.enums.TransactionType;
 import lombok.*;
 
 import javax.persistence.*;
