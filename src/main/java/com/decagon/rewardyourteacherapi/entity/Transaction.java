@@ -1,11 +1,9 @@
-package com.decagon.rewardyourteacherapi.Entity;
+package com.decagon.rewardyourteacherapi.entity;
 
 import com.decagon.rewardyourteacherapi.enums.TransactionType;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
