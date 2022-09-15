@@ -1,10 +1,9 @@
-package com.decagon.rewardyourteacherapi.Entity;
+package com.decagon.rewardyourteacherapi.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
-
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -12,7 +11,7 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Table(name = "notification")
-public class Notification extends BaseClass { ;
+public class Notification extends BaseClass {
 
     private String messageBody;
     @JsonBackReference

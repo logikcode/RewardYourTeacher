@@ -1,14 +1,14 @@
-package com.decagon.rewardyourteacherapi.ServiceImpl;
+package com.decagon.rewardyourteacherapi.serviceImpl;
 
-import com.decagon.rewardyourteacherapi.Entity.Student;
-import com.decagon.rewardyourteacherapi.Entity.Teacher;
-import com.decagon.rewardyourteacherapi.Entity.User;
-import com.decagon.rewardyourteacherapi.Exception.EmailAlreadyExistsException;
-import com.decagon.rewardyourteacherapi.Repository.UserRepository;
-import com.decagon.rewardyourteacherapi.Service.UserService;
+import com.decagon.rewardyourteacherapi.entity.Student;
+import com.decagon.rewardyourteacherapi.entity.Teacher;
+import com.decagon.rewardyourteacherapi.entity.User;
+import com.decagon.rewardyourteacherapi.service.UserService;
 import com.decagon.rewardyourteacherapi.dto.StudentDto;
 import com.decagon.rewardyourteacherapi.dto.TeacherDto;
 import com.decagon.rewardyourteacherapi.enums.Roles;
+import com.decagon.rewardyourteacherapi.exception.EmailAlreadyExistsException;
+import com.decagon.rewardyourteacherapi.repository.UserRepository;
 import com.decagon.rewardyourteacherapi.response.RegisterStudentResponse;
 import com.decagon.rewardyourteacherapi.response.RegisterTeacherResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
 
             userRepository.save(teacher);
 
-            return new RegisterTeacherResponse("User Registration successful", LocalDateTime.now(), teacherDto);
+            return new RegisterTeacherResponse("com.decagon.rewardyourteacherapi.entity.User Registration successful", LocalDateTime.now(), teacherDto);
 
         } else {
 
@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserService {
 
             userRepository.save(student);
 
-            return new RegisterStudentResponse("User Registration successful", LocalDateTime.now(), studentDto);
+            return new RegisterStudentResponse("com.decagon.rewardyourteacherapi.entity.User Registration successful", LocalDateTime.now(), studentDto);
         } else {
 
             throw new EmailAlreadyExistsException("Email Already Exists");

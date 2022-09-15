@@ -1,6 +1,6 @@
 package com.decagon.rewardyourteacherapi.dto;
 
-import com.decagon.rewardyourteacherapi.Entity.School;
+import com.decagon.rewardyourteacherapi.entity.School;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
