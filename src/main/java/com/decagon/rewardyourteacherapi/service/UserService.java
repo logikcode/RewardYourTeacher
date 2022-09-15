@@ -1,4 +1,4 @@
-package com.decagon.rewardyourteacherapi.Service;
+package com.decagon.rewardyourteacherapi.service;
 
 import com.decagon.rewardyourteacherapi.dto.StudentDto;
 import com.decagon.rewardyourteacherapi.dto.TeacherDto;
