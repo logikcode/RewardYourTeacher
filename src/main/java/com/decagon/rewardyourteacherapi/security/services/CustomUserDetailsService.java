@@ -1,8 +1,8 @@
 package com.decagon.rewardyourteacherapi.security.services;
 
-import com.decagon.rewardyourteacherapi.Entity.User;
-import com.decagon.rewardyourteacherapi.Repository.UserRepository;
+import com.decagon.rewardyourteacherapi.entity.User;
 import com.decagon.rewardyourteacherapi.enums.Roles;
+import com.decagon.rewardyourteacherapi.repository.UserRepository;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
