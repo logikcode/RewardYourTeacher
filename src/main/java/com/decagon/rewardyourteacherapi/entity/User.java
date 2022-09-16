@@ -1,5 +1,6 @@
 package com.decagon.rewardyourteacherapi.entity;
 
+import com.decagon.rewardyourteacherapi.enums.Provider;
 import com.decagon.rewardyourteacherapi.enums.Roles;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -42,6 +43,9 @@ public class User extends BaseClass {
 
     @Enumerated(EnumType.STRING)
     private Roles role;
+
+    @Enumerated(EnumType.STRING)
+    private Provider provider;
 
     @OneToMany(mappedBy = "user")
     private List<Transaction> transactionList = new ArrayList<>();

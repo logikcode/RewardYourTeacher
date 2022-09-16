@@ -1,8 +1,12 @@
 package com.decagon.rewardyourteacherapi.serviceImpl;
 
+import com.decagon.rewardyourteacherapi.dto.UserDTO;
 import com.decagon.rewardyourteacherapi.entity.Student;
 import com.decagon.rewardyourteacherapi.entity.Teacher;
 import com.decagon.rewardyourteacherapi.entity.User;
+import com.decagon.rewardyourteacherapi.enums.Provider;
+import com.decagon.rewardyourteacherapi.security.JWTTokenProvider;
+import com.decagon.rewardyourteacherapi.security.OAuth.CustomOAuth2User;
 import com.decagon.rewardyourteacherapi.service.UserService;
 import com.decagon.rewardyourteacherapi.dto.StudentDto;
 import com.decagon.rewardyourteacherapi.dto.TeacherDto;
@@ -12,6 +16,9 @@ import com.decagon.rewardyourteacherapi.repository.UserRepository;
 import com.decagon.rewardyourteacherapi.response.RegisterStudentResponse;
 import com.decagon.rewardyourteacherapi.response.RegisterTeacherResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -26,10 +33,13 @@ public class UserServiceImpl implements UserService {
 
     private final PasswordEncoder passwordEncoder;
 
+    private final JWTTokenProvider jwtTokenProvider;
+
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, JWTTokenProvider jwtTokenProvider) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @Override
@@ -83,8 +93,42 @@ public class UserServiceImpl implements UserService {
 
             throw new EmailAlreadyExistsException("Email Already Exists");
         }
+    }
 
-
+//    /* newly added by Ifeoluwa */
+    public void processOAuthUser(CustomOAuth2User user, Authentication authentication) {
+        Optional<User> existUser = userRepository.findUserByEmail(user.getEmail());
+        if(existUser == null) {
+            User newUser = new User();
+            newUser.setName(user.getName());
+            newUser.setEmail(user.getEmail());
+            newUser.setProvider(Provider.GOOGLE);
+            newUser.setPassword(user.getName()); // set user's name as default password
+            System.out.println("print: " + newUser);
+            userRepository.save(newUser);
+        }
+        String token = jwtTokenProvider.generateToken(authentication);
 
     }
+
+
+
+//    public void createUser(UserDTO user) {
+//        Optional<User> existUser = userRepository.findUserByEmail(user.getEmail());
+//        if(existUser == null) {
+//            User newUser = new User();
+//            newUser.setName(user.getName());
+//            newUser.setEmail(user.getEmail());
+//            newUser.setProvider(Provider.GOOGLE);
+//            userRepository.save(newUser);
+//        }
+
+//    }
+
+
+
+
+
+
+
 }
