@@ -67,4 +67,19 @@ public class User extends BaseClass {
     @JoinColumn(name = "wallet_id", referencedColumnName = "id")
     private Wallet wallet;
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", role=" + role +
+                ", provider=" + provider +
+                ", transactionList=" + transactionList +
+                ", messageList=" + messageList +
+                ", notificationList=" + notificationList +
+                ", school=" + school +
+                ", wallet=" + wallet +
+                '}';
+    }
 }

@@ -10,6 +10,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -60,7 +62,8 @@ public class SecurityConfig {
                 .authenticationEntryPoint(authenticationEntryPoint)
                 .and()
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                /* this is not set to STATELESS as an Oauth user details are taken after login */
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/api/**" ).permitAll()
@@ -80,7 +83,6 @@ public class SecurityConfig {
                     @Override
                     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
                         CustomOAuth2User oauthUser = (CustomOAuth2User) authentication.getPrincipal();
-
                         userService.processOAuthUser(oauthUser, authentication); // call a method in your service
 
                         response.sendRedirect("/api/index");
@@ -100,14 +102,14 @@ public class SecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-//    @Bean
-//    public AuthenticationProvider daoAuthenticationProvider() {
-//        DaoAuthenticationProvider provider =
-//                new DaoAuthenticationProvider();
-//        provider.setPasswordEncoder(new PasswordConfig().passwordEncoder());
-//        provider.setUserDetailsService(customUserDetailsService);
-//        return provider;
-//    }
+    @Bean
+    public AuthenticationProvider daoAuthenticationProvider() {
+        DaoAuthenticationProvider provider =
+                new DaoAuthenticationProvider();
+        provider.setPasswordEncoder(new PasswordConfig().passwordEncoder());
+        provider.setUserDetailsService(customUserDetailsService);
+        return provider;
+    }
 
 }
 

@@ -11,7 +11,7 @@ import java.util.UUID;
 @Data
 public class Transaction extends BaseClass {
 
-    private String uuid = UUID.randomUUID().toString();
+    private UUID uuid = UUID.randomUUID();
 
     @Enumerated(EnumType.STRING)
     private TransactionType transactionType;

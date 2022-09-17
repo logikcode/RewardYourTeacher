@@ -95,38 +95,19 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-//    /* newly added by Ifeoluwa */
     public void processOAuthUser(CustomOAuth2User user, Authentication authentication) {
         Optional<User> existUser = userRepository.findUserByEmail(user.getEmail());
-        if(existUser == null) {
+        if(existUser.isEmpty()) {
             User newUser = new User();
             newUser.setName(user.getName());
             newUser.setEmail(user.getEmail());
             newUser.setProvider(Provider.GOOGLE);
-            newUser.setPassword(user.getName()); // set user's name as default password
-            System.out.println("print: " + newUser);
+            newUser.setRole(Roles.ADMIN);
+            newUser.setPassword(passwordEncoder.encode(user.getName())); // set user's name as default password
             userRepository.save(newUser);
         }
         String token = jwtTokenProvider.generateToken(authentication);
-
     }
-
-
-
-//    public void createUser(UserDTO user) {
-//        Optional<User> existUser = userRepository.findUserByEmail(user.getEmail());
-//        if(existUser == null) {
-//            User newUser = new User();
-//            newUser.setName(user.getName());
-//            newUser.setEmail(user.getEmail());
-//            newUser.setProvider(Provider.GOOGLE);
-//            userRepository.save(newUser);
-//        }
-
-//    }
-
-
-
 
 
 
