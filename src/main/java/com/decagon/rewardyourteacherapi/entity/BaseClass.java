@@ -21,7 +21,7 @@ import java.util.UUID;
 public abstract class BaseClass implements Serializable {
 
     @Id
-    private String id = UUID.randomUUID().toString();
+    private Long id;
 
     @CreationTimestamp
     private LocalDateTime createDate;

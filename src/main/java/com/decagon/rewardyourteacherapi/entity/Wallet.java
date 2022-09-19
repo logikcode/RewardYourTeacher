@@ -16,7 +16,7 @@ public class Wallet extends BaseClass {
 
     private String walletAddress = UUID.randomUUID().toString();
 
-    private BigDecimal balance;
+    private Long balance;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "userId", referencedColumnName = "id" )
