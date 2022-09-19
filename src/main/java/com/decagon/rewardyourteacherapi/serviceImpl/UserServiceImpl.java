@@ -5,6 +5,7 @@ import com.decagon.rewardyourteacherapi.entity.Student;
 import com.decagon.rewardyourteacherapi.entity.Teacher;
 import com.decagon.rewardyourteacherapi.entity.User;
 import com.decagon.rewardyourteacherapi.enums.Provider;
+import com.decagon.rewardyourteacherapi.exception.UserNotFoundException;
 import com.decagon.rewardyourteacherapi.security.JWTTokenProvider;
 import com.decagon.rewardyourteacherapi.security.OAuth.CustomOAuth2User;
 import com.decagon.rewardyourteacherapi.service.UserService;
@@ -110,6 +111,14 @@ public class UserServiceImpl implements UserService {
     }
 
 
+    public User getUserByEmail(String email) {
+        Optional<User> user = userRepository.findUserByEmail(email);
+        if(user != null) {
+            return user.get();
+        } else {
+            throw new UserNotFoundException();
+        }
+    }
 
 
 }

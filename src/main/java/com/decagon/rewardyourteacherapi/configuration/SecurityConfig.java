@@ -82,6 +82,7 @@ public class SecurityConfig {
                 .successHandler(new AuthenticationSuccessHandler() {
                     @Override
                     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+
                         CustomOAuth2User oauthUser = (CustomOAuth2User) authentication.getPrincipal();
                         userService.processOAuthUser(oauthUser, authentication); // call a method in your service
 
