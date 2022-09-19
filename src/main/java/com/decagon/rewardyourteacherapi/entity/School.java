@@ -19,7 +19,8 @@ public class School extends BaseClass {
     @JoinColumn(name = "teacher_id", referencedColumnName = "id")
     private Teacher teacher;
 
-    @OneToOne
-    @JoinColumn(name = "student_id", referencedColumnName = "id")
-    private Student student;
+//    @OneToOne
+//    @JoinColumn(name = "student_id", referencedColumnName = "id")
+//    private Student student;
+
 }

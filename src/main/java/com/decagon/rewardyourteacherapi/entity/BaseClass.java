@@ -7,6 +7,8 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
@@ -21,7 +23,10 @@ import java.util.UUID;
 public abstract class BaseClass implements Serializable {
 
     @Id
-    private String id = UUID.randomUUID().toString();
+    @GeneratedValue(strategy = GenerationType.IDENTITY) /* new change by Ifeoluwa */
+    private Long id;
+
+    private UUID uuid = UUID.randomUUID();
 
     @CreationTimestamp
     private LocalDateTime createDate;
