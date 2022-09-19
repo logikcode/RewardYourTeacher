@@ -1,11 +1,9 @@
 package com.decagon.rewardyourteacherapi.serviceImpl;
 
-import com.decagon.rewardyourteacherapi.dto.UserDTO;
-import com.decagon.rewardyourteacherapi.entity.Student;
-import com.decagon.rewardyourteacherapi.entity.Teacher;
-import com.decagon.rewardyourteacherapi.entity.User;
+import com.decagon.rewardyourteacherapi.entity.*;
 import com.decagon.rewardyourteacherapi.enums.Provider;
 import com.decagon.rewardyourteacherapi.exception.UserNotFoundException;
+import com.decagon.rewardyourteacherapi.repository.SubjectRepository;
 import com.decagon.rewardyourteacherapi.security.JWTTokenProvider;
 import com.decagon.rewardyourteacherapi.security.OAuth.CustomOAuth2User;
 import com.decagon.rewardyourteacherapi.service.UserService;
@@ -17,9 +15,8 @@ import com.decagon.rewardyourteacherapi.repository.UserRepository;
 import com.decagon.rewardyourteacherapi.response.RegisterStudentResponse;
 import com.decagon.rewardyourteacherapi.response.RegisterTeacherResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -32,14 +29,16 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-    private final PasswordEncoder passwordEncoder;
+    private final SubjectRepository subjectRepository;
+
+    private PasswordEncoder passwordEncoder;
 
     private final JWTTokenProvider jwtTokenProvider;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, JWTTokenProvider jwtTokenProvider) {
+    public UserServiceImpl(UserRepository userRepository, SubjectRepository subjectRepository, JWTTokenProvider jwtTokenProvider) {
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
+        this.subjectRepository = subjectRepository;
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
@@ -50,6 +49,7 @@ public class UserServiceImpl implements UserService {
 
         if (user.isEmpty()) {
 
+            passwordEncoder = new BCryptPasswordEncoder();
             Teacher teacher = new Teacher();
 
             teacher.setName(teacherDto.getName());
@@ -58,12 +58,16 @@ public class UserServiceImpl implements UserService {
             teacher.setSchool(teacherDto.getSchool());
             teacher.setRole(Roles.TEACHER);
             teacher.setYearsOfTeaching(teacherDto.getYearsOfTeaching());
-            teacher.setSubjectsList(teacherDto.getSubjectsList());
             teacher.setSchoolType(teacherDto.getSchoolType());
 
             userRepository.save(teacher);
 
-            return new RegisterTeacherResponse("com.decagon.rewardyourteacherapi.entity.User Registration successful", LocalDateTime.now(), teacherDto);
+
+            for(String subjectTitle: teacherDto.getSubjectsList()) {
+                subjectRepository.save(new Subjects(subjectTitle, teacher));
+            }
+
+            return new RegisterTeacherResponse("User Registration successful", LocalDateTime.now(), teacherDto);
 
         } else {
 
@@ -79,6 +83,7 @@ public class UserServiceImpl implements UserService {
 
         if (user.isEmpty()) {
 
+            passwordEncoder = new BCryptPasswordEncoder();
             Student student = new Student();
 
             student.setName(studentDto.getName());
@@ -89,7 +94,8 @@ public class UserServiceImpl implements UserService {
 
             userRepository.save(student);
 
-            return new RegisterStudentResponse("com.decagon.rewardyourteacherapi.entity.User Registration successful", LocalDateTime.now(), studentDto);
+
+            return new RegisterStudentResponse("User Registration successful", LocalDateTime.now(), studentDto);
         } else {
 
             throw new EmailAlreadyExistsException("Email Already Exists");
@@ -113,7 +119,7 @@ public class UserServiceImpl implements UserService {
 
     public User getUserByEmail(String email) {
         Optional<User> user = userRepository.findUserByEmail(email);
-        if(user != null) {
+        if(user.isPresent()) {
             return user.get();
         } else {
             throw new UserNotFoundException();

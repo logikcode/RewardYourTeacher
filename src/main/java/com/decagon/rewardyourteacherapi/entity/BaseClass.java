@@ -26,7 +26,7 @@ public abstract class BaseClass implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY) /* new change by Ifeoluwa */
     private Long id;
 
-    private UUID uuid = UUID.randomUUID();
+//    private UUID uuid = UUID.randomUUID();
 
     @CreationTimestamp
     private LocalDateTime createDate;
@@ -34,5 +34,7 @@ public abstract class BaseClass implements Serializable {
     @UpdateTimestamp
     private LocalDateTime updateDate;
 
-
+    public BaseClass(Long id) {
+        this.id = id;
+    }
 }

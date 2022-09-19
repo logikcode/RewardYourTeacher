@@ -1,7 +1,5 @@
 package com.decagon.rewardyourteacherapi.dto;
 
-import com.decagon.rewardyourteacherapi.entity.School;
-import com.decagon.rewardyourteacherapi.entity.Subjects;
 import com.decagon.rewardyourteacherapi.enums.SchoolType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,11 +18,11 @@ public class TeacherDto {
 
     private String password;
 
-    private School school;
+    private String school;
 
     private int yearsOfTeaching;
 
-    private List<Subjects> subjectsList;
+    private List<String> subjectsList;
 
     private SchoolType schoolType;
 

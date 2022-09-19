@@ -11,6 +11,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,10 +59,8 @@ public class User extends BaseClass {
     @OneToMany(mappedBy = "user")
     private List<Notification> notificationList = new ArrayList<>();
 
-    @JsonBackReference
-    @ManyToOne
-    @JoinColumn(name = "school_Id" , referencedColumnName = "id")
-    private School school;
+
+    private String school;
 
     @OneToOne
     @JoinColumn(name = "wallet_id", referencedColumnName = "id")
@@ -81,5 +80,14 @@ public class User extends BaseClass {
                 ", school=" + school +
                 ", wallet=" + wallet +
                 '}';
+    }
+
+    public User(Long id, String name, String email, String password, Roles role, String school) {
+        super(id);
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.school = school;
     }
 }
