@@ -4,6 +4,7 @@ import com.decagon.rewardyourteacherapi.dto.TransactionDTO;
 import com.decagon.rewardyourteacherapi.entity.Transaction;
 import com.decagon.rewardyourteacherapi.entity.User;
 import com.decagon.rewardyourteacherapi.enums.TransactionType;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import com.decagon.rewardyourteacherapi.exception.UserNotFoundException;
 import com.decagon.rewardyourteacherapi.repository.TransactionRepository;
@@ -33,9 +34,11 @@ import java.io.InputStreamReader;
 public class TransactionServiceImpl implements TransactionService {
     private final TransactionRepository transactionRepository;
     private final UserRepository userRepository;
-    private final String PAYSTACK_SECRET_KEY = "sk_test_fd288e8a28663008ada749f007efb38e141ac7c1";
-    private final String PAYSTACK_BASE_URL = "https://api.paystack.co/transaction/initialize";
-    private final String PAYSTACK_VERIFY_URL = "https://api.paystack.co/transaction/verify/";
+    @Value("${Secret_Key}")
+    private final String PAYSTACK_SECRET_KEY;
+
+    @Value("${Transaction_URL}")
+    private final String PAYSTACK_BASE_URL;
     private final NotificationServiceImpl notificationService;
 
     @Autowired
@@ -67,11 +70,10 @@ public class TransactionServiceImpl implements TransactionService {
             Gson gson = new Gson();
             StringEntity entity = new StringEntity(gson.toJson(paymentRequest));
             HttpClient httpClient = HttpClientBuilder.create().build();
-            String url = "https://api.paystack.co/transaction/initialize";
-            HttpPost post = new HttpPost(url);
+            HttpPost post = new HttpPost(PAYSTACK_BASE_URL);
             post.setEntity(entity);
             post.addHeader("Content-type", "application/json");
-            post.addHeader("Authorization", "Bearer sk_test_fd288e8a28663008ada749f007efb38e141ac7c1");
+            post.addHeader("Authorization", "Bearer " + PAYSTACK_SECRET_KEY);
             StringBuilder result = new StringBuilder();
             HttpResponse response = httpClient.execute(post);
             if (response.getStatusLine().getStatusCode() == HttpStatus.OK.value()) {
