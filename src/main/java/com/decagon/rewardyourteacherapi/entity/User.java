@@ -2,6 +2,7 @@ package com.decagon.rewardyourteacherapi.entity;
 
 import com.decagon.rewardyourteacherapi.enums.Provider;
 import com.decagon.rewardyourteacherapi.enums.Roles;
+import com.decagon.rewardyourteacherapi.enums.SchoolType;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
@@ -21,8 +22,8 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "user_type")
+//@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+//@DiscriminatorColumn(name = "user_type")
 @Table(name = "users")
 public class User extends BaseClass {
 
@@ -38,16 +39,20 @@ public class User extends BaseClass {
 
     @NotBlank
     @Size(min=8, max = 16)
-    @Column(name = "password", nullable = false, unique = true)
+    @Column(name = "password", nullable = false)
     private String password;
 
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role", insertable = false, updatable = false)
+    @Column(name = "role", insertable = true, updatable = true)
     private Roles role;
 
     @Enumerated(EnumType.STRING)
     private Provider provider;
+
+    private int yearsOfTeaching;
+
+    private boolean isRetired;
 
     @OneToMany(mappedBy = "user")
     private List<Transaction> transactionList = new ArrayList<>();
@@ -62,6 +67,12 @@ public class User extends BaseClass {
 
 
     private String school;
+
+    @Enumerated(EnumType.STRING)
+    private SchoolType schoolType;
+
+    @OneToMany(mappedBy = "teacher")
+    private List<Subjects> subjectsList;
 
     @OneToOne
     @JoinColumn(name = "wallet_id", referencedColumnName = "id")

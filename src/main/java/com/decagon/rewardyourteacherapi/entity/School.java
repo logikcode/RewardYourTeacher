@@ -23,18 +23,15 @@ public class School extends BaseClass {
 
     @OneToOne
     @JoinColumn(name = "teacher_id", referencedColumnName = "id")
-    private Teacher teacher;
+    private User teacher;
 
     @OneToOne
     @JoinColumn(name = "student_id", referencedColumnName = "id")
-    private Student student;
+    private User student;
 
-   public School (String name, Teacher teacher) {
-       this.name = name;
-       this.teacher = teacher;
-   }
 
-   public School (String name, Student student) {
+
+   public School (String name, User student) {
        this.name = name;
        this.student = student;
    }

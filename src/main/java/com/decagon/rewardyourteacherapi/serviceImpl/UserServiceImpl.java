@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
         if (user.isEmpty()) {
 
             passwordEncoder = new BCryptPasswordEncoder();
-            Teacher teacher = new Teacher();
+            User teacher = new User();
 
             teacher.setName(teacherDto.getName());
             teacher.setEmail(teacherDto.getEmail());
@@ -65,6 +65,7 @@ public class UserServiceImpl implements UserService {
             teacher.setRole(Roles.TEACHER);
             teacher.setYearsOfTeaching(teacherDto.getYearsOfTeaching());
             teacher.setSchoolType(teacherDto.getSchoolType());
+            teacher.setProvider(Provider.LOCAL);
 
             userRepository.save(teacher);
 
@@ -90,13 +91,14 @@ public class UserServiceImpl implements UserService {
         if (user.isEmpty()) {
 
             passwordEncoder = new BCryptPasswordEncoder();
-            Student student = new Student();
+            User student = new User();
 
             student.setName(studentDto.getName());
             student.setEmail(studentDto.getEmail());
             student.setPassword(passwordEncoder.encode(studentDto.getPassword()));
             student.setSchool(studentDto.getSchool());
             student.setRole(Roles.STUDENT);
+            student.setProvider(Provider.LOCAL);
 
             userRepository.save(student);
 
