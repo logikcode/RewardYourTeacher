@@ -9,6 +9,7 @@ import javax.persistence.*;
 @Setter
 @AllArgsConstructor
 @Entity
+@DiscriminatorValue(value = "student")
 public class Student extends User {
 
 

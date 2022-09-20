@@ -13,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@DiscriminatorValue(value = "teacher")
 public class Teacher extends User{
 
     private int yearsOfTeaching;

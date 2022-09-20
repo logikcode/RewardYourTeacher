@@ -14,12 +14,19 @@ import com.decagon.rewardyourteacherapi.enums.Roles;
 import com.decagon.rewardyourteacherapi.exception.EmailAlreadyExistsException;
 import com.decagon.rewardyourteacherapi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -99,6 +106,25 @@ public class UserServiceImpl implements UserService {
 
             throw new EmailAlreadyExistsException("Email Already Exists");
         }
+    }
+
+    @Override
+    public ResponseAPI<TeacherDto> retrieveTeacher(String role, Pageable pageable, TeacherDto teacherDto) {
+        List<User> users;
+        Pageable firstPageWithFiveElements = PageRequest.of(0, 5, Sort.by("name").descending());
+        Page<User> userPage;
+        if (role == null)
+            userPage = userRepository.findAll(firstPageWithFiveElements);
+        else
+            userPage = (Page<User>) userRepository.findAllByRole(role, firstPageWithFiveElements);
+        users = userPage.getContent();
+        Map<String, Object> response = new HashMap<>();
+        response.put("users", users);
+        response.put("currentPage", userPage.getNumber());
+        response.put("totalItems", userPage.getTotalElements());
+        response.put("totalPages", userPage.getTotalPages());
+
+        return new ResponseAPI<>("Success", LocalDateTime.now(), teacherDto);
     }
 
     public void processOAuthUser(CustomOAuth2User user, Authentication authentication) {
