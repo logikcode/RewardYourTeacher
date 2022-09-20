@@ -9,7 +9,7 @@ import com.decagon.rewardyourteacherapi.exception.ResourceNotFound;
 import com.decagon.rewardyourteacherapi.repository.NotificationRepository;
 import com.decagon.rewardyourteacherapi.repository.TransactionRepository;
 import com.decagon.rewardyourteacherapi.repository.UserRepository;
-import com.decagon.rewardyourteacherapi.response.NotificationResponse;
+import com.decagon.rewardyourteacherapi.response.ResponseAPI;
 import com.decagon.rewardyourteacherapi.service.NotificationService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,14 +42,13 @@ public class NotificationServiceImpl implements NotificationService {
         //save notification
         Notification savedNotification = notificationRepository.save(notification);
 
-        //convert savedNotification to notificationDto
-        NotificationDto savedNotificationDto = convertToDto(savedNotification);
+        //convert savedNotification to notificationDto and return it
 
-        return savedNotificationDto;
+        return convertToDto(savedNotification);
     }
 
     @Override
-    public NotificationResponse depositNotification(Long transactionId) {
+    public ResponseAPI<NotificationDto> depositNotification(Long transactionId) {
         Optional<Transaction> tgTransaction = transactionRepository.findById(transactionId);
         NotificationDto notificationDto = new NotificationDto();
 
@@ -63,7 +62,7 @@ public class NotificationServiceImpl implements NotificationService {
             throw new ResourceNotFound("tgTransaction", "transactionId", transactionId);
         }
 
-        return new NotificationResponse("Notification sent successfully", LocalDateTime.now(), notificationDto);
+        return new ResponseAPI<>("Notification sent successfully", LocalDateTime.now(), notificationDto);
     }
 
     @Override
@@ -77,7 +76,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public NotificationResponse appreciationNotification(Long senderId, Long receiverId) {
+    public ResponseAPI<NotificationDto> appreciationNotification(Long senderId, Long receiverId) {
         Optional<User> sender = userRepository.findById(senderId);
         Optional<User> receiver = userRepository.findById(receiverId);
         NotificationDto notificationDto = new NotificationDto();
@@ -89,7 +88,7 @@ public class NotificationServiceImpl implements NotificationService {
         }else{
             throw new ResourceNotFound("sender", "senderId", senderId);
         }
-        return new NotificationResponse("Notification sent successfully", LocalDateTime.now(), notificationDto);
+        return new ResponseAPI<>("Notification sent successfully", LocalDateTime.now(), notificationDto);
     }
 
 

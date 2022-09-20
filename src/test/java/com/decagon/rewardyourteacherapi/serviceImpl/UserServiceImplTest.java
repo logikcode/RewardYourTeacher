@@ -8,8 +8,7 @@
 //import com.decagon.rewardyourteacherapi.repository.SchoolRepository;
 //import com.decagon.rewardyourteacherapi.repository.SubjectRepository;
 //import com.decagon.rewardyourteacherapi.repository.UserRepository;
-//import com.decagon.rewardyourteacherapi.response.RegisterStudentResponse;
-//import com.decagon.rewardyourteacherapi.response.RegisterTeacherResponse;
+//import com.decagon.rewardyourteacherapi.response.ResponseAPI;
 //import org.junit.jupiter.api.BeforeEach;
 //import org.junit.jupiter.api.Test;
 //import org.mockito.InjectMocks;
@@ -69,15 +68,15 @@
 //
 //
 //        var actual = userServiceImpl.TeacherSignUp(teacherDto);
-//        RegisterTeacherResponse teacherResponse = new RegisterTeacherResponse("sucess", time, teacherDto);
+//        ResponseAPI<TeacherDto> teacherResponse = new ResponseAPI<>("sucess", time, teacherDto);
 //
-//        assertEquals(teacherResponse.getTeacherDto().getName(), actual.getTeacherDto().getName());
-//        assertEquals(teacherResponse.getTeacherDto().getEmail(), actual.getTeacherDto().getEmail());
-//        assertEquals(teacherResponse.getTeacherDto().getPassword(), actual.getTeacherDto().getPassword());
-//        assertEquals(teacherResponse.getTeacherDto().getSchool(), actual.getTeacherDto().getSchool());
-//        assertEquals(teacherResponse.getTeacherDto().getYearsOfTeaching(), actual.getTeacherDto().getYearsOfTeaching());
-//        assertEquals(teacherResponse.getTeacherDto().getSubjectsList(), actual.getTeacherDto().getSubjectsList());
-//        assertEquals(teacherResponse.getTeacherDto().getSchoolType(), actual.getTeacherDto().getSchoolType());
+//        assertEquals(teacherResponse.getDto().getName(), actual.getDto().getName());
+//        assertEquals(teacherResponse.getDto().getEmail(), actual.getDto().getEmail());
+//        assertEquals(teacherResponse.getDto().getPassword(), actual.getDto().getPassword());
+//        assertEquals(teacherResponse.getDto().getSchool(), actual.getDto().getSchool());
+//        assertEquals(teacherResponse.getDto().getYearsOfTeaching(), actual.getDto().getYearsOfTeaching());
+//        assertEquals(teacherResponse.getDto().getSubjectsList(), actual.getDto().getSubjectsList());
+//        assertEquals(teacherResponse.getDto().getSchoolType(), actual.getDto().getSchoolType());
 //
 //
 //    }
@@ -88,12 +87,12 @@
 //
 //
 //        var actual = userServiceImpl.StudentSignUp(studentDto);
-//        RegisterStudentResponse studentResponse = new RegisterStudentResponse("succes", time, studentDto);
+//        ResponseAPI<StudentDto> studentResponse = new ResponseAPI<>("success", time, studentDto);
 //
-//        assertEquals(studentResponse.getStudentDto().getName(), actual.getStudentDto().getName());
-//        assertEquals(studentResponse.getStudentDto().getEmail(), actual.getStudentDto().getEmail());
-//        assertEquals(studentResponse.getStudentDto().getPassword(), actual.getStudentDto().getPassword());
-//        assertEquals(studentResponse.getStudentDto().getSchool(), actual.getStudentDto().getSchool());
+//        assertEquals(studentResponse.getDto().getName(), actual.getDto().getName());
+//        assertEquals(studentResponse.getDto().getEmail(), actual.getDto().getEmail());
+//        assertEquals(studentResponse.getDto().getPassword(), actual.getDto().getPassword());
+//        assertEquals(studentResponse.getDto().getSchool(), actual.getDto().getSchool());
 //    }
 //
 //}

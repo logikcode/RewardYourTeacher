@@ -4,6 +4,7 @@ import com.decagon.rewardyourteacherapi.entity.*;
 import com.decagon.rewardyourteacherapi.enums.Provider;
 import com.decagon.rewardyourteacherapi.exception.UserNotFoundException;
 import com.decagon.rewardyourteacherapi.repository.SubjectRepository;
+import com.decagon.rewardyourteacherapi.response.ResponseAPI;
 import com.decagon.rewardyourteacherapi.security.JWTTokenProvider;
 import com.decagon.rewardyourteacherapi.security.OAuth.CustomOAuth2User;
 import com.decagon.rewardyourteacherapi.service.UserService;
@@ -12,8 +13,6 @@ import com.decagon.rewardyourteacherapi.dto.TeacherDto;
 import com.decagon.rewardyourteacherapi.enums.Roles;
 import com.decagon.rewardyourteacherapi.exception.EmailAlreadyExistsException;
 import com.decagon.rewardyourteacherapi.repository.UserRepository;
-import com.decagon.rewardyourteacherapi.response.RegisterStudentResponse;
-import com.decagon.rewardyourteacherapi.response.RegisterTeacherResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -43,7 +42,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public RegisterTeacherResponse TeacherSignUp(TeacherDto teacherDto) {
+    public ResponseAPI<TeacherDto> TeacherSignUp(TeacherDto teacherDto) {
 
         Optional<User> user = userRepository.findUserByEmail(teacherDto.getEmail());
 
@@ -67,7 +66,7 @@ public class UserServiceImpl implements UserService {
                 subjectRepository.save(new Subjects(subjectTitle, teacher));
             }
 
-            return new RegisterTeacherResponse("User Registration successful", LocalDateTime.now(), teacherDto);
+            return new ResponseAPI<>("User Registration successful", LocalDateTime.now(), teacherDto);
 
         } else {
 
@@ -77,7 +76,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public RegisterStudentResponse StudentSignUp(StudentDto studentDto) {
+    public ResponseAPI<StudentDto> StudentSignUp(StudentDto studentDto) {
 
         Optional<User> user = userRepository.findUserByEmail(studentDto.getEmail());
 
@@ -95,7 +94,7 @@ public class UserServiceImpl implements UserService {
             userRepository.save(student);
 
 
-            return new RegisterStudentResponse("User Registration successful", LocalDateTime.now(), studentDto);
+            return new ResponseAPI<>("User Registration successful", LocalDateTime.now(), studentDto);
         } else {
 
             throw new EmailAlreadyExistsException("Email Already Exists");
@@ -125,6 +124,5 @@ public class UserServiceImpl implements UserService {
             throw new UserNotFoundException();
         }
     }
-
 
 }

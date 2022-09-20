@@ -1,8 +1,7 @@
 package com.decagon.rewardyourteacherapi.controller;
 
 import com.decagon.rewardyourteacherapi.dto.UserDTO;
-import com.decagon.rewardyourteacherapi.response.RegisterStudentResponse;
-import com.decagon.rewardyourteacherapi.response.RegisterTeacherResponse;
+import com.decagon.rewardyourteacherapi.response.ResponseAPI;
 import com.decagon.rewardyourteacherapi.service.UserService;
 import com.decagon.rewardyourteacherapi.dto.StudentDto;
 import com.decagon.rewardyourteacherapi.dto.TeacherDto;
@@ -36,7 +35,7 @@ public class UserController {
     @PostMapping(value = "/teachers-registration")
     public ResponseEntity<Object> teacherRegistration(@RequestBody TeacherDto teacherDto) throws MessagingException {
 
-        RegisterTeacherResponse teacherResponse = userService.TeacherSignUp(teacherDto);
+        ResponseAPI<TeacherDto> teacherResponse = userService.TeacherSignUp(teacherDto);
 
         UserDTO userDTO = new UserDTO();
         userDTO.setName(teacherDto.getName());
@@ -49,7 +48,7 @@ public class UserController {
     @PostMapping(value = "/students-registration")
     public ResponseEntity<Object> studentRegistration(@RequestBody StudentDto studentDto) throws MessagingException {
 
-        RegisterStudentResponse studentResponse = userService.StudentSignUp(studentDto);
+        ResponseAPI<StudentDto> studentResponse = userService.StudentSignUp(studentDto);
 
         UserDTO userDTO = new UserDTO();
         userDTO.setName(studentDto.getName());
