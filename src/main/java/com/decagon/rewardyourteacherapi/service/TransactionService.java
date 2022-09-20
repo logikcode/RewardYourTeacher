@@ -6,13 +6,15 @@ import com.decagon.rewardyourteacherapi.entity.Transaction;
 import com.decagon.rewardyourteacherapi.response.PaymentResponse;
 import com.decagon.rewardyourteacherapi.utils.PaymentRequest;
 import org.springframework.context.PayloadApplicationEvent;
+import org.springframework.stereotype.Service;
 
+@Service
 public interface TransactionService {
 
     //create a transaction service
     Transaction createTransaction(TransactionDTO transactionDto);
 
-    PaymentResponse initDeposit(Long userId, PaymentRequest paymentRequest) throws Exception;
+    PaymentResponse initDeposit(PaymentRequest paymentRequest) throws Exception;
 
 
 }

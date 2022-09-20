@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Digits;
-import java.math.BigDecimal;
 
 @Data
 @AllArgsConstructor

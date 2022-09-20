@@ -17,10 +17,10 @@ public class TransactionController {
     public TransactionController(TransactionService transactionService) {
         this.transactionService = transactionService;
     }
-    @PostMapping(value = "/{id}deposit")
-    public ResponseEntity<?> deposit(@RequestParam Long amount, @PathVariable Long id) throws Exception {
+    @PostMapping(value = "/deposit")
+    public ResponseEntity<?> deposit(@RequestParam Long amount) throws Exception {
         PaymentRequest paymentRequest = new PaymentRequest();
         paymentRequest.setAmount(amount);
-        return new ResponseEntity<>(transactionService.initDeposit(id, paymentRequest), HttpStatus.OK);
+        return new ResponseEntity<>(transactionService.initDeposit(paymentRequest), HttpStatus.OK);
     }
 }

@@ -34,11 +34,11 @@ import java.io.InputStreamReader;
 public class TransactionServiceImpl implements TransactionService {
     private final TransactionRepository transactionRepository;
     private final UserRepository userRepository;
-    @Value("${Secret_Key}")
-    private final String PAYSTACK_SECRET_KEY;
+    @Value("${secret_key}")
+    private String PAYSTACK_SECRET_KEY;
 
-    @Value("${Transaction_URL}")
-    private final String PAYSTACK_BASE_URL;
+    @Value("${paystack_url}")
+    private  String PAYSTACK_BASE_URL;
     private final NotificationServiceImpl notificationService;
 
     @Autowired
@@ -60,11 +60,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public PaymentResponse initDeposit(Long userId, PaymentRequest paymentRequest) throws Exception {
-        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user", "id", userId));
-        Transaction transaction = new Transaction();
-        paymentRequest.setEmail(user.getEmail());
-
+    public PaymentResponse initDeposit(PaymentRequest paymentRequest) throws Exception {
         PaymentResponse paymentResponse;
         try {
             Gson gson = new Gson();
@@ -76,6 +72,7 @@ public class TransactionServiceImpl implements TransactionService {
             post.addHeader("Authorization", "Bearer " + PAYSTACK_SECRET_KEY);
             StringBuilder result = new StringBuilder();
             HttpResponse response = httpClient.execute(post);
+
             if (response.getStatusLine().getStatusCode() == HttpStatus.OK.value()) {
 
                 BufferedReader responseReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
@@ -89,13 +86,6 @@ public class TransactionServiceImpl implements TransactionService {
             }
             ObjectMapper mapper = new ObjectMapper();
             paymentResponse = mapper.readValue(result.toString(), PaymentResponse.class);
-            transaction.setTransactionType(TransactionType.CREDIT);
-            transaction.setAmount(paymentRequest.getAmount());
-            user.getWallet().setBalance(user.getWallet().getBalance() + paymentRequest.getAmount());
-            transaction.setUser(user);
-            transactionRepository.save(transaction);
-            notificationService.depositNotification(transaction.getId());
-
 
         } catch (IOException e) {
             throw new RuntimeException("error occurred while initializing transaction");
