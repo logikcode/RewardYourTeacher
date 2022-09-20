@@ -1,14 +1,16 @@
 package com.decagon.rewardyourteacherapi.response;
 
-import com.decagon.rewardyourteacherapi.dto.StudentDto;
+import com.decagon.rewardyourteacherapi.dto.TeacherDto;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
-public class RegisterStudentResponse {
+@Getter
+public class ResponseAPI<T> {
 
     private String message;
     private LocalDateTime time;
-    private StudentDto studentDto;
+    private T dto;
 }
