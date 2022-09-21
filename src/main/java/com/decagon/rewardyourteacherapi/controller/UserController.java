@@ -8,14 +8,12 @@ import com.decagon.rewardyourteacherapi.dto.TeacherDto;
 import com.decagon.rewardyourteacherapi.serviceImpl.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
 
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.FOUND;
 
 @RestController
 @RequestMapping(value = "/api")
@@ -57,4 +55,15 @@ public class UserController {
         mailService.sendEmail(userDTO);
         return new ResponseEntity<>(studentResponse, CREATED);
     }
+
+    @GetMapping(value = "/view/teacher/{id}")
+    public ResponseEntity<Object> viewParticularTeacher(@PathVariable("id") long id) {
+        return new ResponseEntity<>(userService.viewTeacher(id), FOUND);
+    }
+
+    @GetMapping(value = "/search/teacher/{name}")
+    public ResponseEntity<Object> searchForTeacher(@PathVariable("name") String name) {
+        return new ResponseEntity<>(userService.searchForTeacher(name), FOUND);
+    }
+
 }
