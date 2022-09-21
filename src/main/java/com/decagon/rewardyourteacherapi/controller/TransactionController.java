@@ -39,9 +39,7 @@ public class TransactionController {
 
     @GetMapping("/transactions")
     public ResponseEntity<TransactionResponse> getTransactionHistory(Authentication authentication, HttpSession session, Model model) {
-//        String email = authentication.getName();
         String email = (String) session.getAttribute("loggedUserEmail");
-
         List<Transaction> userTransaction = transactionService.getTransactionHistory(email);
         model.addAttribute("userTransaction", userTransaction);
         return new ResponseEntity<>(new TransactionResponse("success", userTransaction), HttpStatus.OK);
