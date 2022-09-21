@@ -4,6 +4,7 @@ import com.decagon.rewardyourteacherapi.entity.*;
 import com.decagon.rewardyourteacherapi.enums.Provider;
 import com.decagon.rewardyourteacherapi.exception.UserNotFoundException;
 import com.decagon.rewardyourteacherapi.repository.SubjectRepository;
+import com.decagon.rewardyourteacherapi.repository.TeacherRepository;
 import com.decagon.rewardyourteacherapi.response.ResponseAPI;
 import com.decagon.rewardyourteacherapi.security.JWTTokenProvider;
 import com.decagon.rewardyourteacherapi.security.OAuth.CustomOAuth2User;
@@ -24,10 +25,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -37,14 +35,17 @@ public class UserServiceImpl implements UserService {
 
     private final SubjectRepository subjectRepository;
 
+    private final TeacherRepository teacherRepository;
+
     private PasswordEncoder passwordEncoder;
 
     private final JWTTokenProvider jwtTokenProvider;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, SubjectRepository subjectRepository, JWTTokenProvider jwtTokenProvider) {
+    public UserServiceImpl(UserRepository userRepository, SubjectRepository subjectRepository, TeacherRepository teacherRepository, JWTTokenProvider jwtTokenProvider) {
         this.userRepository = userRepository;
         this.subjectRepository = subjectRepository;
+        this.teacherRepository = teacherRepository;
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
@@ -56,7 +57,7 @@ public class UserServiceImpl implements UserService {
         if (user.isEmpty()) {
 
             passwordEncoder = new BCryptPasswordEncoder();
-            User teacher = new User();
+            Teacher teacher = new Teacher();
 
             teacher.setName(teacherDto.getName());
             teacher.setEmail(teacherDto.getEmail());
@@ -91,7 +92,7 @@ public class UserServiceImpl implements UserService {
         if (user.isEmpty()) {
 
             passwordEncoder = new BCryptPasswordEncoder();
-            User student = new User();
+            Student student = new Student();
 
             student.setName(studentDto.getName());
             student.setEmail(studentDto.getEmail());
@@ -111,14 +112,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseAPI<TeacherDto> retrieveTeacher(String role, Pageable pageable, TeacherDto teacherDto) {
-        List<User> users;
+    public ResponseAPI<Map<String, Object>> retrieveTeacher(Pageable pageable) {
+        List<Teacher> users;
         Pageable firstPageWithFiveElements = PageRequest.of(0, 5, Sort.by("name").descending());
-        Page<User> userPage;
-        if (role == null)
-            userPage = userRepository.findAll(firstPageWithFiveElements);
-        else
-            userPage = (Page<User>) userRepository.findAllByRole(role, firstPageWithFiveElements);
+        Page<Teacher> userPage;
+
+        userPage = teacherRepository.findAll(firstPageWithFiveElements);
+
         users = userPage.getContent();
         Map<String, Object> response = new HashMap<>();
         response.put("users", users);
@@ -126,8 +126,10 @@ public class UserServiceImpl implements UserService {
         response.put("totalItems", userPage.getTotalElements());
         response.put("totalPages", userPage.getTotalPages());
 
-        return new ResponseAPI<>("Success", LocalDateTime.now(), teacherDto);
+        return new ResponseAPI<>("Success", LocalDateTime.now(), response);
     }
+
+
 
     public void processOAuthUser(CustomOAuth2User user, Authentication authentication) {
         Optional<User> existUser = userRepository.findUserByEmail(user.getEmail());

@@ -18,7 +18,7 @@ public class Subjects extends BaseClass {
 
     @ManyToOne
     @JoinColumn(name = "teacher_id", referencedColumnName = "id")
-    private User teacher;
+    private Teacher teacher;
 
     @Override
     public boolean equals(Object o) {

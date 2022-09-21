@@ -56,9 +56,10 @@ public class UserController {
         return new ResponseEntity<>(studentResponse, CREATED);
     }
 
-    @GetMapping(value = "/retrieve_teacher/{role}")
-    public ResponseEntity<Object> retrieveTeacher(@RequestBody TeacherDto teacherDto, @PathVariable(value =
-            "role") @RequestParam(required = false) String role, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {
-        return ResponseEntity.ok().body(userService.retrieveTeacher(role, Pageable.unpaged(), teacherDto));
+    @GetMapping(value = "/retrieve_teacher")
+    public ResponseEntity<Object> retrieveTeacher(@PathVariable(value = "role") @RequestParam(required = false) String role,
+                                                  @RequestParam(defaultValue = "0") int page,
+                                                  @RequestParam(defaultValue = "5") int size) {
+        return ResponseEntity.ok().body(userService.retrieveTeacher(Pageable.unpaged()));
     }
 }
