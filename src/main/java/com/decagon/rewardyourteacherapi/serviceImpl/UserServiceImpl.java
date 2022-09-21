@@ -1,20 +1,21 @@
 package com.decagon.rewardyourteacherapi.serviceImpl;
 
-import com.decagon.rewardyourteacherapi.entity.*;
-import com.decagon.rewardyourteacherapi.enums.Provider;
-import com.decagon.rewardyourteacherapi.exception.UserNotFoundException;
-import com.decagon.rewardyourteacherapi.repository.SubjectRepository;
-import com.decagon.rewardyourteacherapi.repository.TeacherRepository;
-import com.decagon.rewardyourteacherapi.response.ResponseAPI;
-import com.decagon.rewardyourteacherapi.security.JWTTokenProvider;
-import com.decagon.rewardyourteacherapi.security.OAuth.CustomOAuth2User;
-import com.decagon.rewardyourteacherapi.security.services.CustomUserDetailsService;
-import com.decagon.rewardyourteacherapi.service.UserService;
+
+import com.decagon.rewardyourteacherapi.OAuth.CustomOAuth2User;
 import com.decagon.rewardyourteacherapi.dto.StudentDto;
 import com.decagon.rewardyourteacherapi.dto.TeacherDto;
+import com.decagon.rewardyourteacherapi.entity.*;
+import com.decagon.rewardyourteacherapi.enums.Provider;
 import com.decagon.rewardyourteacherapi.enums.Roles;
 import com.decagon.rewardyourteacherapi.exception.EmailAlreadyExistsException;
+import com.decagon.rewardyourteacherapi.exception.UserNotFoundException;
+import com.decagon.rewardyourteacherapi.repository.SubjectsRepository;
+import com.decagon.rewardyourteacherapi.repository.TeacherRepository;
 import com.decagon.rewardyourteacherapi.repository.UserRepository;
+import com.decagon.rewardyourteacherapi.repository.WalletRepository;
+import com.decagon.rewardyourteacherapi.response.ResponseAPI;
+import com.decagon.rewardyourteacherapi.security.jwt.JWTTokenProvider;
+import com.decagon.rewardyourteacherapi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,34 +23,37 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
-
-
     private final UserRepository userRepository;
-
-    private final SubjectRepository subjectRepository;
+    private final WalletRepository walletRepository;
+    private final SubjectsRepository subjectsRepository;
 
     private final TeacherRepository teacherRepository;
-
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     private final JWTTokenProvider jwtTokenProvider;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, SubjectRepository subjectRepository, TeacherRepository teacherRepository, JWTTokenProvider jwtTokenProvider) {
+
+
+    public UserServiceImpl(WalletRepository walletRepository, UserRepository userRepository, SubjectsRepository subjectsRepository, TeacherRepository teacherRepository, PasswordEncoder passwordEncoder, JWTTokenProvider jwtTokenProvider) {
         this.userRepository = userRepository;
-        this.subjectRepository = subjectRepository;
+        this.subjectsRepository = subjectsRepository;
         this.teacherRepository = teacherRepository;
+        this.passwordEncoder = passwordEncoder;
         this.jwtTokenProvider = jwtTokenProvider;
+        this.walletRepository = walletRepository;
 
     }
 
@@ -60,7 +64,7 @@ public class UserServiceImpl implements UserService {
 
         if (user.isEmpty()) {
 
-            passwordEncoder = new BCryptPasswordEncoder();
+//            passwordEncoder = new BCryptPasswordEncoder();
             Teacher teacher = new Teacher();
 
             teacher.setName(teacherDto.getName());
@@ -76,7 +80,7 @@ public class UserServiceImpl implements UserService {
 
 
             for(String subjectTitle: teacherDto.getSubjectsList()) {
-                subjectRepository.save(new Subjects(subjectTitle, teacher));
+                subjectsRepository.save(new Subjects(subjectTitle, teacher));
             }
 
             return new ResponseAPI<>("User Registration successful", LocalDateTime.now(), teacherDto);
@@ -92,10 +96,11 @@ public class UserServiceImpl implements UserService {
     public ResponseAPI<StudentDto> StudentSignUp(StudentDto studentDto) {
 
         Optional<User> user = userRepository.findUserByEmail(studentDto.getEmail());
+        Wallet wallet = new Wallet();
 
         if (user.isEmpty()) {
 
-            passwordEncoder = new BCryptPasswordEncoder();
+//            passwordEncoder = new BCryptPasswordEncoder();
             Student student = new Student();
 
             student.setName(studentDto.getName());
@@ -103,7 +108,14 @@ public class UserServiceImpl implements UserService {
             student.setPassword(passwordEncoder.encode(studentDto.getPassword()));
             student.setSchool(studentDto.getSchool());
             student.setRole(Roles.STUDENT);
+
+            wallet.setUser(student);
+            wallet.setBalance(BigDecimal.valueOf(0.0));
+            walletRepository.save(wallet);
+            student.setWallet(wallet);
+
             student.setProvider(Provider.LOCAL);
+
 
             userRepository.save(student);
 
@@ -142,7 +154,6 @@ public class UserServiceImpl implements UserService {
             newUser.setName(user.getName());
             newUser.setEmail(user.getEmail());
             newUser.setProvider(Provider.GOOGLE);
-            newUser.setRole(Roles.ADMIN);
             newUser.setPassword(passwordEncoder.encode(user.getName())); // set user's name as default password
             userRepository.save(newUser);
         }

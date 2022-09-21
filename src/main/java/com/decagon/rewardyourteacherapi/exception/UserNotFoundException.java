@@ -17,5 +17,10 @@ public class UserNotFoundException extends RuntimeException{
         this.userFieldName = userFieldName;
         this.fieldValue = fieldValue;
     }
+    public UserNotFoundException(String user) {
+        super(String.format("%s not found with %s : '%s'", user)); // EX Post not found with id :'1'
+        this.user = user;
+
+    }
 
 }

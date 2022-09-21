@@ -24,9 +24,6 @@ import java.util.Properties;
 @AllArgsConstructor
 public class MailService {
 
-
-
-
     public void sendEmail(UserDTO userDTO) throws MessagingException {
     Properties mailProperties = new Properties();
         mailProperties.put("mail.smtp.auth", true);
@@ -79,6 +76,7 @@ public class MailService {
         // Second part is image attachment
         messageBodyPart = new MimeBodyPart();
         String filename = "src/main/resources/static/email.png";
+
         DataSource source = new FileDataSource(new File(filename));
         messageBodyPart.setDataHandler(new DataHandler(source));
         messageBodyPart.setFileName(filename);
