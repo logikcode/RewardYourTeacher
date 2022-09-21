@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
@@ -19,7 +20,7 @@ public class Transaction extends BaseClass {
     @Enumerated(EnumType.STRING)
     private TransactionType transactionType;
 
-    private Long amount;
+    private BigDecimal amount;
 
 
     @JsonBackReference

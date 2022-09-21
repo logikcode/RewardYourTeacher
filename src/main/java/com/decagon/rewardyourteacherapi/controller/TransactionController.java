@@ -1,42 +1,43 @@
 package com.decagon.rewardyourteacherapi.controller;
 
+
 import com.decagon.rewardyourteacherapi.entity.Transaction;
+import com.decagon.rewardyourteacherapi.response.PaymentResponse;
 import com.decagon.rewardyourteacherapi.response.TransactionResponse;
-import com.decagon.rewardyourteacherapi.serviceImpl.TransactionServiceImpl;
-import com.decagon.rewardyourteacherapi.serviceImpl.UserServiceImpl;
-import lombok.extern.slf4j.Slf4j;
+import com.decagon.rewardyourteacherapi.service.TransactionService;
+import com.decagon.rewardyourteacherapi.utils.PaymentRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.security.Principal;
 import java.util.List;
 
-/**
- * @author ifeoluwa on 18/09/2022
- * @project
- */
-
 @RestController
-@RequestMapping()
+@RequestMapping(value = "/api/users")
 public class TransactionController {
+    private final TransactionService transactionService;
+    private PaymentResponse paymentResponse = new PaymentResponse();
 
-    private TransactionServiceImpl transactionService;
-    private UserServiceImpl userService;
 
     @Autowired
-    public TransactionController(TransactionServiceImpl transactionService, UserServiceImpl userService) {
+    public TransactionController(TransactionService transactionService) {
         this.transactionService = transactionService;
-        this.userService = userService;
     }
+    @PostMapping(value = "/deposit")
+    public ResponseEntity<?> deposit(Principal principal, @RequestParam Long amount, @RequestBody PaymentRequest paymentRequest) throws Exception {
 
-
-
+        paymentResponse = transactionService.initDeposit(principal, paymentRequest, amount);
+        return new ResponseEntity<>(paymentResponse, HttpStatus.OK);
+    }
+    @GetMapping(value = "/callback")
+    public ResponseEntity<?> payStackResponse() throws Exception {
+        return new ResponseEntity<>(transactionService.verifyTransaction(paymentResponse.getData().getReference()), HttpStatus.OK);
+    }
     @GetMapping("/transactions")
     public ResponseEntity<TransactionResponse> getTransactionHistory(Authentication authentication, HttpSession session, Model model) {
         String email = (String) session.getAttribute("loggedUserEmail");
