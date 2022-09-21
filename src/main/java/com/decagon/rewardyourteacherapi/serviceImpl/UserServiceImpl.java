@@ -4,6 +4,7 @@ import com.decagon.rewardyourteacherapi.entity.*;
 import com.decagon.rewardyourteacherapi.enums.Provider;
 import com.decagon.rewardyourteacherapi.exception.UserNotFoundException;
 import com.decagon.rewardyourteacherapi.repository.SubjectRepository;
+import com.decagon.rewardyourteacherapi.repository.TeacherRepository;
 import com.decagon.rewardyourteacherapi.response.ResponseAPI;
 import com.decagon.rewardyourteacherapi.security.JWTTokenProvider;
 import com.decagon.rewardyourteacherapi.security.OAuth.CustomOAuth2User;
@@ -14,13 +15,17 @@ import com.decagon.rewardyourteacherapi.enums.Roles;
 import com.decagon.rewardyourteacherapi.exception.EmailAlreadyExistsException;
 import com.decagon.rewardyourteacherapi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -30,14 +35,17 @@ public class UserServiceImpl implements UserService {
 
     private final SubjectRepository subjectRepository;
 
+    private final TeacherRepository teacherRepository;
+
     private PasswordEncoder passwordEncoder;
 
     private final JWTTokenProvider jwtTokenProvider;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, SubjectRepository subjectRepository, JWTTokenProvider jwtTokenProvider) {
+    public UserServiceImpl(UserRepository userRepository, SubjectRepository subjectRepository, TeacherRepository teacherRepository, JWTTokenProvider jwtTokenProvider) {
         this.userRepository = userRepository;
         this.subjectRepository = subjectRepository;
+        this.teacherRepository = teacherRepository;
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
@@ -58,6 +66,7 @@ public class UserServiceImpl implements UserService {
             teacher.setRole(Roles.TEACHER);
             teacher.setYearsOfTeaching(teacherDto.getYearsOfTeaching());
             teacher.setSchoolType(teacherDto.getSchoolType());
+            teacher.setProvider(Provider.LOCAL);
 
             userRepository.save(teacher);
 
@@ -90,6 +99,7 @@ public class UserServiceImpl implements UserService {
             student.setPassword(passwordEncoder.encode(studentDto.getPassword()));
             student.setSchool(studentDto.getSchool());
             student.setRole(Roles.STUDENT);
+            student.setProvider(Provider.LOCAL);
 
             userRepository.save(student);
 
@@ -100,6 +110,26 @@ public class UserServiceImpl implements UserService {
             throw new EmailAlreadyExistsException("Email Already Exists");
         }
     }
+
+    @Override
+    public ResponseAPI<Map<String, Object>> retrieveTeacher(Pageable pageable) {
+        List<Teacher> users;
+        Pageable firstPageWithFiveElements = PageRequest.of(0, 5, Sort.by("name").descending());
+        Page<Teacher> userPage;
+
+        userPage = teacherRepository.findAll(firstPageWithFiveElements);
+
+        users = userPage.getContent();
+        Map<String, Object> response = new HashMap<>();
+        response.put("users", users);
+        response.put("currentPage", userPage.getNumber());
+        response.put("totalItems", userPage.getTotalElements());
+        response.put("totalPages", userPage.getTotalPages());
+
+        return new ResponseAPI<>("Success", LocalDateTime.now(), response);
+    }
+
+
 
     public void processOAuthUser(CustomOAuth2User user, Authentication authentication) {
         Optional<User> existUser = userRepository.findUserByEmail(user.getEmail());

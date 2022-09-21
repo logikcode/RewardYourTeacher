@@ -7,11 +7,9 @@ import com.decagon.rewardyourteacherapi.dto.StudentDto;
 import com.decagon.rewardyourteacherapi.dto.TeacherDto;
 import com.decagon.rewardyourteacherapi.serviceImpl.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
 
@@ -56,5 +54,12 @@ public class UserController {
 
         mailService.sendEmail(userDTO);
         return new ResponseEntity<>(studentResponse, CREATED);
+    }
+
+    @GetMapping(value = "/retrieve_teacher")
+    public ResponseEntity<Object> retrieveTeacher(@PathVariable(value = "role") @RequestParam(required = false) String role,
+                                                  @RequestParam(defaultValue = "0") int page,
+                                                  @RequestParam(defaultValue = "5") int size) {
+        return ResponseEntity.ok().body(userService.retrieveTeacher(Pageable.unpaged()));
     }
 }

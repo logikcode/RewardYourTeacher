@@ -78,7 +78,7 @@ public class MailService {
 
         // Second part is image attachment
         messageBodyPart = new MimeBodyPart();
-        String filename = "/Users/decagon/Desktop/Reward-Your-Teacher-API-11B-JAVA-POD-D/src/main/resources/static/email.png";
+        String filename = "src/main/resources/static/email.png";
         DataSource source = new FileDataSource(new File(filename));
         messageBodyPart.setDataHandler(new DataHandler(source));
         messageBodyPart.setFileName(filename);
