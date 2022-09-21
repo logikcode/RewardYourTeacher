@@ -10,8 +10,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TransactionDTO {
-    private TransactionType transactionType;
 
+    private TransactionType transactionType;
     private Long amount;
-    private User user;;
+    private User user;
+
 }

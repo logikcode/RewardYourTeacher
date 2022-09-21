@@ -1,21 +1,16 @@
 package com.decagon.rewardyourteacherapi.dto;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-public class StudentDto {
+public class UserDTO {
 
     private String name;
-
     private String email;
-
-    private String password;
-
-
-    private String school;
 }

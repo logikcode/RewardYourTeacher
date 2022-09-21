@@ -2,12 +2,11 @@ package com.decagon.rewardyourteacherapi.service;
 
 import com.decagon.rewardyourteacherapi.dto.StudentDto;
 import com.decagon.rewardyourteacherapi.dto.TeacherDto;
-import com.decagon.rewardyourteacherapi.response.RegisterStudentResponse;
-import com.decagon.rewardyourteacherapi.response.RegisterTeacherResponse;
+import com.decagon.rewardyourteacherapi.response.ResponseAPI;
 
 public interface UserService {
 
-    RegisterTeacherResponse TeacherSignUp(TeacherDto teacherDto);
+    ResponseAPI<TeacherDto> TeacherSignUp(TeacherDto teacherDto);
 
-    RegisterStudentResponse StudentSignUp(StudentDto studentDto);
+    ResponseAPI<StudentDto> StudentSignUp(StudentDto studentDto);
 }

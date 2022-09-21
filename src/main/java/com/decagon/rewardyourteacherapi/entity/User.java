@@ -1,5 +1,6 @@
 package com.decagon.rewardyourteacherapi.entity;
 
+import com.decagon.rewardyourteacherapi.enums.Provider;
 import com.decagon.rewardyourteacherapi.enums.Roles;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -10,6 +11,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +45,9 @@ public class User extends BaseClass {
     @Enumerated(EnumType.STRING)
     private Roles role;
 
+    @Enumerated(EnumType.STRING)
+    private Provider provider;
+
     @OneToMany(mappedBy = "user")
     private List<Transaction> transactionList = new ArrayList<>();
 
@@ -54,13 +59,35 @@ public class User extends BaseClass {
     @OneToMany(mappedBy = "user")
     private List<Notification> notificationList = new ArrayList<>();
 
-    @JsonBackReference
-    @ManyToOne
-    @JoinColumn(name = "school_Id" , referencedColumnName = "id")
-    private School school;
+
+    private String school;
 
     @OneToOne
     @JoinColumn(name = "wallet_id", referencedColumnName = "id")
     private Wallet wallet;
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", role=" + role +
+                ", provider=" + provider +
+                ", transactionList=" + transactionList +
+                ", messageList=" + messageList +
+                ", notificationList=" + notificationList +
+                ", school=" + school +
+                ", wallet=" + wallet +
+                '}';
+    }
+
+    public User(Long id, String name, String email, String password, Roles role, String school) {
+        super(id);
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.school = school;
+    }
 }

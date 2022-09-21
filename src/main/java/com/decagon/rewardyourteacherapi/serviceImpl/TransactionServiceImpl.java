@@ -1,30 +1,28 @@
 package com.decagon.rewardyourteacherapi.serviceImpl;
 
-import com.decagon.rewardyourteacherapi.dto.TransactionDTO;
 import com.decagon.rewardyourteacherapi.entity.Transaction;
 import com.decagon.rewardyourteacherapi.entity.User;
+import com.decagon.rewardyourteacherapi.entity.Wallet;
 import com.decagon.rewardyourteacherapi.enums.TransactionType;
-import com.decagon.rewardyourteacherapi.utils.AuthDetails;
-import com.decagon.rewardyourteacherapi.utils.VerifyTransactionResponse;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import org.apache.http.client.methods.HttpGet;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import com.decagon.rewardyourteacherapi.exception.UserNotFoundException;
 import com.decagon.rewardyourteacherapi.repository.TransactionRepository;
-import com.decagon.rewardyourteacherapi.repository.UserRepository;
+import com.decagon.rewardyourteacherapi.repository.WalletRepository;
 import com.decagon.rewardyourteacherapi.response.PaymentResponse;
 import com.decagon.rewardyourteacherapi.service.TransactionService;
+import com.decagon.rewardyourteacherapi.utils.AuthDetails;
 import com.decagon.rewardyourteacherapi.utils.PaymentRequest;
+import com.decagon.rewardyourteacherapi.utils.VerifyTransactionResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -33,14 +31,18 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.security.Principal;
+import java.util.List;
+import java.util.Optional;
 
 
 @Service
 @Transactional
 public class TransactionServiceImpl implements TransactionService {
     private final TransactionRepository transactionRepository;
-    private final UserRepository userRepository;
+
+    private UserServiceImpl userService;
     private AuthDetails authDetails;
+    private User user = new User();
 
     @Value("${secret_key}")
     private String PAYSTACK_SECRET_KEY;
@@ -51,23 +53,34 @@ public class TransactionServiceImpl implements TransactionService {
     @Value("${verification_url}")
     private String PAYSTACK_VERIFY_URL;
     private final NotificationServiceImpl notificationService;
+    private final WalletRepository walletRepository;
 
     @Autowired
-    public TransactionServiceImpl(TransactionRepository transactionRepository, UserRepository userRepository,
-                                  NotificationServiceImpl notificationService) {
+    public TransactionServiceImpl(TransactionRepository transactionRepository, UserServiceImpl userService,
+                                  NotificationServiceImpl notificationService, AuthDetails authDetails, WalletRepository walletRepository, WalletRepository walletRepository1) {
+        this.authDetails = authDetails;
         this.transactionRepository = transactionRepository;
-        this.userRepository = userRepository;
+        this.userService = userService;
         this.notificationService = notificationService;
+        this.walletRepository = walletRepository1;
     }
 
 
     @Override
     public PaymentResponse initDeposit(Principal principal, PaymentRequest paymentRequest, Long amount) throws Exception {
-        User user = authDetails.getAuthorizedUser(principal);
+       // Principal principal = (Principal) authentication.getPrincipal();
+
+//
+//        user.setEmail(authDetails.getAuthorizedUser(principal).getEmail());
+//        user.setPassword(authDetails.getAuthorizedUser(principal).getPassword());
+        user = (User) authDetails.getAuthorizedUser(principal);
+
+
+
 
         PaymentResponse paymentResponse;
         paymentRequest.setAmount(amount * 100);
-        paymentRequest.setEmail(user.getEmail());
+        paymentRequest.setEmail(authDetails.getAuthorizedUser(principal).getEmail());
 
         try {
             Gson gson = new Gson();
@@ -99,17 +112,15 @@ public class TransactionServiceImpl implements TransactionService {
         }
         return paymentResponse;
     }
-    public VerifyTransactionResponse verifyTransaction(Principal principal, String reference) throws Exception {
+    public VerifyTransactionResponse verifyTransaction(String reference) throws Exception {
         System.out.println("called?");
-        User user = authDetails.getAuthorizedUser(principal);
         Transaction transaction = new Transaction();
-        notificationService.depositNotification(transaction.getId());
         VerifyTransactionResponse paystackresponse = null;
         try {
             HttpClient client = HttpClientBuilder.create().build();
             HttpGet request = new HttpGet(PAYSTACK_VERIFY_URL + reference);
             request.addHeader("Content-type", "application/json");
-            request.addHeader("Authorization", "Bearer PAYSTACK_SECRET_KEY");
+            request.addHeader("Authorization", "Bearer " + PAYSTACK_SECRET_KEY);
             StringBuilder result = new StringBuilder();
             HttpResponse response = client.execute(request);
             if (response.getStatusLine().getStatusCode() == 200) {
@@ -132,9 +143,18 @@ public class TransactionServiceImpl implements TransactionService {
             if (paystackresponse == null || paystackresponse.getStatus().equals("false")) {
                 throw new Exception("An error occurred while  verifying payment");
             } else if (paystackresponse.getData().getStatus().equals("success")) {
+
                 transaction.setAmount(paystackresponse.getData().getAmount().divide(BigDecimal.valueOf(100)));
                 transaction.setTransactionType(TransactionType.CREDIT);
-                user.getWallet().setBalance(user.getWallet().getBalance().add(transaction.getAmount()));
+
+//                BigDecimal userbal = user.getWallet().getBalance();
+//                BigDecimal transac = transaction.getAmount();
+                Optional<Wallet> wallet = walletRepository.findById(user.getWallet().getId());
+                if (wallet.isPresent()){
+                    wallet.get().setBalance(wallet.get().getBalance().add(transaction.getAmount()));
+                    walletRepository.save(wallet.get());
+                }
+
                 transaction.setUser(user);
 
                 transactionRepository.save(transaction);
@@ -145,10 +165,17 @@ public class TransactionServiceImpl implements TransactionService {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            throw new Exception("Internal server error");
         }
         return paystackresponse;
     }
+    @Override
+    public List<Transaction> getTransactionHistory(String email) {
+        User user = userService.getUserByEmail(email);
+        List<Transaction> transactionHistory = transactionRepository.findUserTransactionHistory(user.getId());
+        return transactionHistory;
+    }
 
 }
+
+
 
