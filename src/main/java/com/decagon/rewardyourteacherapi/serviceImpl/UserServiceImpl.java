@@ -3,7 +3,7 @@ package com.decagon.rewardyourteacherapi.serviceImpl;
 import com.decagon.rewardyourteacherapi.entity.*;
 import com.decagon.rewardyourteacherapi.enums.Provider;
 import com.decagon.rewardyourteacherapi.exception.UserNotFoundException;
-import com.decagon.rewardyourteacherapi.repository.SubjectRepository;
+import com.decagon.rewardyourteacherapi.repository.SubjectsRepository;
 import com.decagon.rewardyourteacherapi.repository.TeacherRepository;
 import com.decagon.rewardyourteacherapi.response.ResponseAPI;
 import com.decagon.rewardyourteacherapi.security.JWTTokenProvider;
@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-    private final SubjectRepository subjectRepository;
+    private final SubjectsRepository subjectsRepository;
 
     private final TeacherRepository teacherRepository;
 
@@ -42,9 +42,9 @@ public class UserServiceImpl implements UserService {
     private final JWTTokenProvider jwtTokenProvider;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, SubjectRepository subjectRepository, TeacherRepository teacherRepository, JWTTokenProvider jwtTokenProvider) {
+    public UserServiceImpl(UserRepository userRepository, SubjectsRepository subjectsRepository, TeacherRepository teacherRepository, JWTTokenProvider jwtTokenProvider) {
         this.userRepository = userRepository;
-        this.subjectRepository = subjectRepository;
+        this.subjectsRepository = subjectsRepository;
         this.teacherRepository = teacherRepository;
         this.jwtTokenProvider = jwtTokenProvider;
     }
@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
 
 
             for(String subjectTitle: teacherDto.getSubjectsList()) {
-                subjectRepository.save(new Subjects(subjectTitle, teacher));
+                subjectsRepository.save(new Subjects(subjectTitle, teacher));
             }
 
             return new ResponseAPI<>("User Registration successful", LocalDateTime.now(), teacherDto);

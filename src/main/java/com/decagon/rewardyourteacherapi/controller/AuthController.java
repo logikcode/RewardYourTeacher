@@ -1,8 +1,10 @@
 package com.decagon.rewardyourteacherapi.controller;
 
 import com.decagon.rewardyourteacherapi.dto.LoginDto;
+import com.decagon.rewardyourteacherapi.entity.User;
 import com.decagon.rewardyourteacherapi.response.LoginResponse;
 import com.decagon.rewardyourteacherapi.security.JWTTokenProvider;
+import com.decagon.rewardyourteacherapi.serviceImpl.UserServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping(value = "/api/auth")
@@ -23,9 +26,11 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
 
+    private final UserServiceImpl userService;
+
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> authenticateUser(@RequestBody LoginDto loginDto) {
+    public ResponseEntity<LoginResponse> authenticateUser(@RequestBody LoginDto loginDto, HttpSession session) {
 
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 loginDto.getEmail(), loginDto.getPassword()));
@@ -34,6 +39,9 @@ public class AuthController {
 
         // get token form tokenProvider
         String token = jwtTokenProvider.generateToken(authentication);
+
+        User user = userService.getUserByEmail(loginDto.getEmail());
+        session.setAttribute("loggedUser", user);
 
         return ResponseEntity.ok(new LoginResponse(token));
     }
