@@ -1,7 +1,6 @@
 package com.decagon.rewardyourteacherapi.serviceImpl;
 
 import com.decagon.rewardyourteacherapi.dto.UserDTO;
-import com.decagon.rewardyourteacherapi.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.stereotype.Service;
@@ -23,9 +22,6 @@ import java.util.Properties;
 @Data
 @AllArgsConstructor
 public class MailService {
-
-
-
 
     public void sendEmail(UserDTO userDTO) throws MessagingException {
     Properties mailProperties = new Properties();
