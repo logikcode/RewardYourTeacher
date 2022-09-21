@@ -1,5 +1,5 @@
 
-package com.decagon.rewardyourteacherapi.security;
+package com.decagon.rewardyourteacherapi.security.jwt;
 
 import com.decagon.rewardyourteacherapi.security.services.CustomUserDetailsService;
 import com.decagon.rewardyourteacherapi.utils.AppConstants;
