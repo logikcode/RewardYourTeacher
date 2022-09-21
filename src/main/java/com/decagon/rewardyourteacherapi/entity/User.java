@@ -43,6 +43,7 @@ public class User extends BaseClass {
 
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "role", insertable = true, updatable = true)
     private Roles role;
 
     @Enumerated(EnumType.STRING)
