@@ -8,6 +8,7 @@ import com.decagon.rewardyourteacherapi.repository.TeacherRepository;
 import com.decagon.rewardyourteacherapi.response.ResponseAPI;
 import com.decagon.rewardyourteacherapi.security.JWTTokenProvider;
 import com.decagon.rewardyourteacherapi.security.OAuth.CustomOAuth2User;
+import com.decagon.rewardyourteacherapi.security.services.CustomUserDetailsService;
 import com.decagon.rewardyourteacherapi.service.UserService;
 import com.decagon.rewardyourteacherapi.dto.StudentDto;
 import com.decagon.rewardyourteacherapi.dto.TeacherDto;
@@ -20,10 +21,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -47,6 +50,7 @@ public class UserServiceImpl implements UserService {
         this.subjectRepository = subjectRepository;
         this.teacherRepository = teacherRepository;
         this.jwtTokenProvider = jwtTokenProvider;
+
     }
 
     @Override
@@ -153,6 +157,14 @@ public class UserServiceImpl implements UserService {
         } else {
             throw new UserNotFoundException();
         }
+    }
+    @Override
+    public ResponseAPI<BigDecimal> userWalletBalance(Long id)  {
+        User user = userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        BigDecimal walletBallance = user.getWallet().getBalance();
+
+        return new ResponseAPI<>("success", LocalDateTime.now(), walletBallance);
     }
 
 }

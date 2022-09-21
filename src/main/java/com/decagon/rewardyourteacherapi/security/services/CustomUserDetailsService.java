@@ -39,6 +39,5 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         return Collections.singleton(new SimpleGrantedAuthority(role.toString()));
     }
-
 }
 

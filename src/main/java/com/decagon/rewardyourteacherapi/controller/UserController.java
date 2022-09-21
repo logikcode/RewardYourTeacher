@@ -8,12 +8,16 @@ import com.decagon.rewardyourteacherapi.dto.TeacherDto;
 import com.decagon.rewardyourteacherapi.serviceImpl.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
 
+import java.math.BigDecimal;
+
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequestMapping(value = "/api")
@@ -56,10 +60,16 @@ public class UserController {
         return new ResponseEntity<>(studentResponse, CREATED);
     }
 
-    @GetMapping(value = "/retrieve_teacher")
+    @GetMapping(value = "/retrieve-teacher")
     public ResponseEntity<Object> retrieveTeacher(@PathVariable(value = "role") @RequestParam(required = false) String role,
                                                   @RequestParam(defaultValue = "0") int page,
                                                   @RequestParam(defaultValue = "5") int size) {
         return ResponseEntity.ok().body(userService.retrieveTeacher(Pageable.unpaged()));
     }
+@GetMapping(value = "/retrieve/balance/{id}")
+public ResponseEntity<?> currentUserBalance(@PathVariable(value = "id") Long id) {
+        return new ResponseEntity<>(userService.userWalletBalance(id), OK);
+
+}
+
 }

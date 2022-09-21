@@ -37,4 +37,5 @@ public abstract class BaseClass implements Serializable {
     public BaseClass(Long id) {
         this.id = id;
     }
+
 }
