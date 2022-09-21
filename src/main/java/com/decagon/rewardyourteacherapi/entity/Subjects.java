@@ -1,6 +1,7 @@
 package com.decagon.rewardyourteacherapi.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.Hibernate;
 
@@ -12,6 +13,7 @@ import java.util.Objects;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
 public class Subjects extends BaseClass {
 
     private String title;
