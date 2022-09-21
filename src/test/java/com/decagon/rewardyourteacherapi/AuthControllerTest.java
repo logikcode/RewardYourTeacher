@@ -2,7 +2,7 @@ package com.decagon.rewardyourteacherapi;
 
 import com.decagon.rewardyourteacherapi.controller.AuthController;
 import com.decagon.rewardyourteacherapi.dto.LoginDto;
-import com.decagon.rewardyourteacherapi.security.JWTTokenProvider;
+import com.decagon.rewardyourteacherapi.security.jwt.JWTTokenProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,7 +37,7 @@ class AuthControllerTest {
     private JWTTokenProvider jWTTokenProvider;
 
     /**
-     * Method under test: {@link AuthController#authenticateUser(LoginDto)}
+     * Method under test:
      */
     @Test
     void testAuthenticateUser() throws Exception {
