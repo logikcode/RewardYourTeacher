@@ -34,7 +34,7 @@ public class TransactionController {
         return new ResponseEntity<>(paymentResponse, HttpStatus.OK);
     }
     @GetMapping(value = "/callback")
-    public ResponseEntity<?> callback() throws Exception {
+    public ResponseEntity<?> payStackResponse() throws Exception {
         return new ResponseEntity<>(transactionService.verifyTransaction(paymentResponse.getData().getReference()), HttpStatus.OK);
     }
     @GetMapping("/transactions")

@@ -4,6 +4,7 @@ import com.decagon.rewardyourteacherapi.entity.Transaction;
 import com.decagon.rewardyourteacherapi.entity.User;
 import com.decagon.rewardyourteacherapi.entity.Wallet;
 import com.decagon.rewardyourteacherapi.enums.TransactionType;
+import com.decagon.rewardyourteacherapi.exception.ResourceNotFound;
 import com.decagon.rewardyourteacherapi.repository.TransactionRepository;
 import com.decagon.rewardyourteacherapi.repository.WalletRepository;
 import com.decagon.rewardyourteacherapi.response.PaymentResponse;
@@ -68,17 +69,11 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public PaymentResponse initDeposit(Principal principal, PaymentRequest paymentRequest, Long amount) throws Exception {
-       // Principal principal = (Principal) authentication.getPrincipal();
 
-//
-//        user.setEmail(authDetails.getAuthorizedUser(principal).getEmail());
-//        user.setPassword(authDetails.getAuthorizedUser(principal).getPassword());
         user = (User) authDetails.getAuthorizedUser(principal);
 
-
-
-
         PaymentResponse paymentResponse;
+
         paymentRequest.setAmount(amount * 100);
         paymentRequest.setEmail(authDetails.getAuthorizedUser(principal).getEmail());
 
@@ -112,10 +107,11 @@ public class TransactionServiceImpl implements TransactionService {
         }
         return paymentResponse;
     }
-    public VerifyTransactionResponse verifyTransaction(String reference) throws Exception {
-        System.out.println("called?");
+    @Override
+    public VerifyTransactionResponse verifyTransaction(String reference) {
+
         Transaction transaction = new Transaction();
-        VerifyTransactionResponse paystackresponse = null;
+        VerifyTransactionResponse payStackResponse = null;
         try {
             HttpClient client = HttpClientBuilder.create().build();
             HttpGet request = new HttpGet(PAYSTACK_VERIFY_URL + reference);
@@ -123,7 +119,7 @@ public class TransactionServiceImpl implements TransactionService {
             request.addHeader("Authorization", "Bearer " + PAYSTACK_SECRET_KEY);
             StringBuilder result = new StringBuilder();
             HttpResponse response = client.execute(request);
-            if (response.getStatusLine().getStatusCode() == 200) {
+            if (response.getStatusLine().getStatusCode() == HttpStatus.OK.value()) {
                 BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 
                 String line;
@@ -132,41 +128,38 @@ public class TransactionServiceImpl implements TransactionService {
                 }
 
             } else {
-                throw new Exception("Error Occured while connecting to paystack url");
+                throw new Exception("Error Occurred while connecting to PayStack URL");
             }
             ObjectMapper mapper = new ObjectMapper();
 
-            //mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 
-            paystackresponse = mapper.readValue(result.toString(), VerifyTransactionResponse.class);
+            payStackResponse = mapper.readValue(result.toString(), VerifyTransactionResponse.class);
 
-            if (paystackresponse == null || paystackresponse.getStatus().equals("false")) {
+            if (payStackResponse == null || payStackResponse.getStatus().equals("false")) {
                 throw new Exception("An error occurred while  verifying payment");
-            } else if (paystackresponse.getData().getStatus().equals("success")) {
+            } else if (payStackResponse.getData().getStatus().equals("success")) {
 
-                transaction.setAmount(paystackresponse.getData().getAmount().divide(BigDecimal.valueOf(100)));
+                transaction.setAmount(payStackResponse.getData().getAmount().divide(BigDecimal.valueOf(100)));
                 transaction.setTransactionType(TransactionType.CREDIT);
 
-//                BigDecimal userbal = user.getWallet().getBalance();
-//                BigDecimal transac = transaction.getAmount();
                 Optional<Wallet> wallet = walletRepository.findById(user.getWallet().getId());
                 if (wallet.isPresent()){
                     wallet.get().setBalance(wallet.get().getBalance().add(transaction.getAmount()));
                     walletRepository.save(wallet.get());
-                }
+                }else
+                    throw new ResourceNotFound("wallet", "id", wallet.get().getId());
 
                 transaction.setUser(user);
 
                 transactionRepository.save(transaction);
 
                 notificationService.depositNotification(transaction.getId());
-                //PAYMENT IS SUCCESSFUL, APPLY VALUE TO THE TRANSACTION
             }
 
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        return paystackresponse;
+        return payStackResponse;
     }
     @Override
     public List<Transaction> getTransactionHistory(String email) {
