@@ -58,12 +58,12 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Autowired
     public TransactionServiceImpl(TransactionRepository transactionRepository, UserServiceImpl userService,
-                                  NotificationServiceImpl notificationService, AuthDetails authDetails, WalletRepository walletRepository, WalletRepository walletRepository1) {
+                                  NotificationServiceImpl notificationService, AuthDetails authDetails, WalletRepository walletRepository) {
         this.authDetails = authDetails;
         this.transactionRepository = transactionRepository;
         this.userService = userService;
         this.notificationService = notificationService;
-        this.walletRepository = walletRepository1;
+        this.walletRepository = walletRepository;
     }
 
 
