@@ -1,13 +1,14 @@
 package com.decagon.rewardyourteacherapi.controller;
 
 import com.decagon.rewardyourteacherapi.entity.Transaction;
-import com.decagon.rewardyourteacherapi.entity.User;
 import com.decagon.rewardyourteacherapi.response.TransactionResponse;
 import com.decagon.rewardyourteacherapi.serviceImpl.TransactionServiceImpl;
 import com.decagon.rewardyourteacherapi.serviceImpl.UserServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,10 +38,11 @@ public class TransactionController {
 
 
     @GetMapping("/transactions")
-    public ResponseEntity<TransactionResponse> getTransactionHistory(HttpSession session, Model model) {
-        User user = (User) session.getAttribute("loggedUser");
-//        System.out.println("user logged in here: " + user);
-        List<Transaction> userTransaction = transactionService.getTransactionHistory(user.getEmail());
+    public ResponseEntity<TransactionResponse> getTransactionHistory(Authentication authentication, HttpSession session, Model model) {
+//        String email = authentication.getName();
+        String email = (String) session.getAttribute("loggedUserEmail");
+
+        List<Transaction> userTransaction = transactionService.getTransactionHistory(email);
         model.addAttribute("userTransaction", userTransaction);
         return new ResponseEntity<>(new TransactionResponse("success", userTransaction), HttpStatus.OK);
     }

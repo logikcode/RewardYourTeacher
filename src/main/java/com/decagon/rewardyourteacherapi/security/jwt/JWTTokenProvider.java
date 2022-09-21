@@ -1,6 +1,6 @@
 
 
-package com.decagon.rewardyourteacherapi.security;
+package com.decagon.rewardyourteacherapi.security.jwt;
 
 import com.decagon.rewardyourteacherapi.exception.TokenIssueException;
 import io.jsonwebtoken.*;

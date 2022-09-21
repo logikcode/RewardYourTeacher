@@ -1,6 +1,6 @@
 package com.decagon.rewardyourteacherapi.controller;
 
-import com.decagon.rewardyourteacherapi.security.JWTTokenProvider;
+import com.decagon.rewardyourteacherapi.security.jwt.JWTTokenProvider;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

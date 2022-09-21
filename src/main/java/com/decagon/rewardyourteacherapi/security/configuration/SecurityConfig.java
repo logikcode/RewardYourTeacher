@@ -1,9 +1,10 @@
-package com.decagon.rewardyourteacherapi.configuration;
+package com.decagon.rewardyourteacherapi.security.configuration;
 
-import com.decagon.rewardyourteacherapi.security.JWTAuthenticationEntryPoint;
-import com.decagon.rewardyourteacherapi.security.JWTAuthenticationFilter;
-import com.decagon.rewardyourteacherapi.security.OAuth.CustomOAuth2User;
-import com.decagon.rewardyourteacherapi.security.OAuth.CustomOAuth2UserService;
+import com.decagon.rewardyourteacherapi.configuration.PasswordConfig;
+import com.decagon.rewardyourteacherapi.security.jwt.JWTAuthenticationEntryPoint;
+import com.decagon.rewardyourteacherapi.security.jwt.JWTAuthenticationFilter;
+import com.decagon.rewardyourteacherapi.OAuth.CustomOAuth2User;
+import com.decagon.rewardyourteacherapi.OAuth.CustomOAuth2UserService;
 import com.decagon.rewardyourteacherapi.security.services.CustomUserDetailsService;
 import com.decagon.rewardyourteacherapi.serviceImpl.UserServiceImpl;
 import org.springframework.context.annotation.Bean;
@@ -91,7 +92,7 @@ public class SecurityConfig {
                         CustomOAuth2User oauthUser = (CustomOAuth2User) authentication.getPrincipal();
                         userService.processOAuthUser(oauthUser, authentication); // call a method in your service
 
-                        response.sendRedirect("/api/index");
+                        response.sendRedirect("/api/auth/index");
                     }
                 })
                 .and()

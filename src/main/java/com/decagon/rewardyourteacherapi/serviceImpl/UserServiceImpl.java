@@ -1,13 +1,14 @@
 package com.decagon.rewardyourteacherapi.serviceImpl;
 
+import com.decagon.rewardyourteacherapi.configuration.PasswordConfig;
 import com.decagon.rewardyourteacherapi.entity.*;
 import com.decagon.rewardyourteacherapi.enums.Provider;
 import com.decagon.rewardyourteacherapi.exception.UserNotFoundException;
 import com.decagon.rewardyourteacherapi.repository.SubjectsRepository;
 import com.decagon.rewardyourteacherapi.repository.TeacherRepository;
 import com.decagon.rewardyourteacherapi.response.ResponseAPI;
-import com.decagon.rewardyourteacherapi.security.JWTTokenProvider;
-import com.decagon.rewardyourteacherapi.security.OAuth.CustomOAuth2User;
+import com.decagon.rewardyourteacherapi.security.jwt.JWTTokenProvider;
+import com.decagon.rewardyourteacherapi.OAuth.CustomOAuth2User;
 import com.decagon.rewardyourteacherapi.service.UserService;
 import com.decagon.rewardyourteacherapi.dto.StudentDto;
 import com.decagon.rewardyourteacherapi.dto.TeacherDto;
@@ -37,15 +38,17 @@ public class UserServiceImpl implements UserService {
 
     private final TeacherRepository teacherRepository;
 
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
+
 
     private final JWTTokenProvider jwtTokenProvider;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, SubjectsRepository subjectsRepository, TeacherRepository teacherRepository, JWTTokenProvider jwtTokenProvider) {
+    public UserServiceImpl(UserRepository userRepository, SubjectsRepository subjectsRepository, TeacherRepository teacherRepository, PasswordEncoder passwordEncoder, JWTTokenProvider jwtTokenProvider) {
         this.userRepository = userRepository;
         this.subjectsRepository = subjectsRepository;
         this.teacherRepository = teacherRepository;
+        this.passwordEncoder = passwordEncoder;
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
@@ -56,7 +59,7 @@ public class UserServiceImpl implements UserService {
 
         if (user.isEmpty()) {
 
-            passwordEncoder = new BCryptPasswordEncoder();
+//            passwordEncoder = new BCryptPasswordEncoder();
             Teacher teacher = new Teacher();
 
             teacher.setName(teacherDto.getName());
@@ -91,7 +94,7 @@ public class UserServiceImpl implements UserService {
 
         if (user.isEmpty()) {
 
-            passwordEncoder = new BCryptPasswordEncoder();
+//            passwordEncoder = new BCryptPasswordEncoder();
             Student student = new Student();
 
             student.setName(studentDto.getName());
@@ -138,7 +141,6 @@ public class UserServiceImpl implements UserService {
             newUser.setName(user.getName());
             newUser.setEmail(user.getEmail());
             newUser.setProvider(Provider.GOOGLE);
-            newUser.setRole(Roles.ADMIN);
             newUser.setPassword(passwordEncoder.encode(user.getName())); // set user's name as default password
             userRepository.save(newUser);
         }
