@@ -10,10 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import javax.mail.MessagingException;
-
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.HttpStatus.FOUND;
 
 @RestController
@@ -73,5 +72,11 @@ public class UserController {
                                                   @RequestParam(defaultValue = "5") int size) {
         return ResponseEntity.ok().body(userService.retrieveTeacher(Pageable.unpaged()));
     }
+
+@GetMapping(value = "/retrieve/balance/{id}")
+public ResponseEntity<?> currentUserBalance(@PathVariable(value = "id") Long id) {
+        return new ResponseEntity<>(userService.userWalletBalance(id), OK);
+
+}
 
 }
