@@ -2,6 +2,9 @@ package com.decagon.rewardyourteacherapi.repository;
 
 import com.decagon.rewardyourteacherapi.entity.Wallet;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+
 
 import org.springframework.stereotype.Repository;
 

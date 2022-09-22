@@ -11,13 +11,21 @@ import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Optional;
 
+import java.util.List;
+
 public interface UserService {
 
     ResponseAPI<TeacherDto> TeacherSignUp(TeacherDto teacherDto);
 
     ResponseAPI<StudentDto> StudentSignUp(StudentDto studentDto);
 
+
+    ResponseAPI<TeacherDto> viewTeacher(long id);
+
+    ResponseAPI<List<TeacherDto>> searchForTeacher(String name);
+
     ResponseAPI<Map<String, Object>> retrieveTeacher(Pageable pageable);
+
 
     ResponseAPI<BigDecimal> userWalletBalance(Long id);
 }

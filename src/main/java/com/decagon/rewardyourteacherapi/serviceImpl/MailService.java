@@ -1,7 +1,6 @@
 package com.decagon.rewardyourteacherapi.serviceImpl;
 
 import com.decagon.rewardyourteacherapi.dto.UserDTO;
-import com.decagon.rewardyourteacherapi.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.stereotype.Service;
@@ -76,7 +75,6 @@ public class MailService {
         // Second part is image attachment
         messageBodyPart = new MimeBodyPart();
         String filename = "src/main/resources/static/email.png";
-
         DataSource source = new FileDataSource(new File(filename));
         messageBodyPart.setDataHandler(new DataHandler(source));
         messageBodyPart.setFileName(filename);
