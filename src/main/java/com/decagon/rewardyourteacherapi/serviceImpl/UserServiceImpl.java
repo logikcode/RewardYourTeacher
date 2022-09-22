@@ -62,6 +62,7 @@ public class UserServiceImpl implements UserService {
         this.studentRepository = studentRepository;
         this.jwtTokenProvider = jwtTokenProvider;
         this.walletRepository = walletRepository;
+
     }
 
     @Override
@@ -268,6 +269,14 @@ public class UserServiceImpl implements UserService {
         } else {
             throw new UserNotFoundException();
         }
+    }
+    @Override
+    public ResponseAPI<BigDecimal> userWalletBalance(Long id)  {
+        User user = userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        BigDecimal walletBallance = user.getWallet().getBalance();
+
+        return new ResponseAPI<>("success", LocalDateTime.now(), walletBallance);
     }
 
     public ResponseAPI< List<Teacher> > retrieveAllTeachersInSch(String schoolName){

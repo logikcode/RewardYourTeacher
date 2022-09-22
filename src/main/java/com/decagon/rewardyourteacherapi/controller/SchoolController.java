@@ -18,13 +18,6 @@ import static org.springframework.http.HttpStatus.OK;
 public class SchoolController {
 
     private final SchoolServiceImpl schoolService;
-
-
-//    public ResponseEntity<ResponseAPI<List<School>>> getAllSchools(Pageable pageable){
-//        return new ResponseEntity<>(schoolService.getAllSchools(pageable) , OK);
-//
-//    }
-
     @GetMapping(value = "/schools")
     public ResponseEntity<ResponseAPI<Map<String, Object>>> getAllSchools(Pageable pageable){
         return new ResponseEntity<>(schoolService.getAllSchools(pageable) , OK);
