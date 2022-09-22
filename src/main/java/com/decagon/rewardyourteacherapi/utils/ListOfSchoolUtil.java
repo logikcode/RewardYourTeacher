@@ -1,6 +1,5 @@
 package com.decagon.rewardyourteacherapi.utils;
 
-
 import com.decagon.rewardyourteacherapi.dto.SchoolDTO;
 import lombok.Data;
 
