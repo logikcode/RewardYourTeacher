@@ -22,9 +22,6 @@ import java.util.Properties;
 @AllArgsConstructor
 public class MailService {
 
-
-
-
     public void sendEmail(UserDTO userDTO) throws MessagingException {
     Properties mailProperties = new Properties();
         mailProperties.put("mail.smtp.auth", true);

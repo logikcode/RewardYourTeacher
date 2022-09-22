@@ -7,8 +7,6 @@ import lombok.Setter;
 import org.hibernate.Hibernate;
 
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.util.Objects;
 
@@ -19,7 +17,6 @@ import java.util.Objects;
 @Entity
 @Table(name = "schools")
 public class School extends BaseClass {
-
    private String name;
     private String type;
     private String address;
@@ -33,6 +30,11 @@ public class School extends BaseClass {
 //        this.city = city;
 //        this.state = state;
 //    }
+
+
+
+
+
 
     @Override
     public boolean equals(Object o) {
