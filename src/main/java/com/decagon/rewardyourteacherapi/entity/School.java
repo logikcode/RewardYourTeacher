@@ -23,14 +23,6 @@ public class School extends BaseClass {
     private String city;
     private String state;
 
-//    public School(String name, String type, String address, String city, String state) {
-//        this.name = name;
-//        this.type = type;
-//        this.address = address;
-//        this.city = city;
-//        this.state = state;
-//    }
-
 
 
 
