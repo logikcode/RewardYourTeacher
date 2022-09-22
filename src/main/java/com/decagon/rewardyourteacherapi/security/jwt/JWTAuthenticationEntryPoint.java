@@ -1,4 +1,4 @@
-package com.decagon.rewardyourteacherapi.security;
+package com.decagon.rewardyourteacherapi.security.jwt;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;

@@ -57,6 +57,16 @@ public class UserController {
         return new ResponseEntity<>(studentResponse, CREATED);
     }
 
+    @GetMapping(value = "/view/teacher/{id}")
+    public ResponseEntity<Object> viewParticularTeacher(@PathVariable("id") long id) {
+        return new ResponseEntity<>(userService.viewTeacher(id), FOUND);
+    }
+
+    @GetMapping(value = "/search/teacher/{name}")
+    public ResponseEntity<Object> searchForTeacher(@PathVariable("name") String name) {
+        return new ResponseEntity<>(userService.searchForTeacher(name), FOUND);
+    }
+
     @GetMapping(value = "/retrieve_teacher")
     public ResponseEntity<Object> retrieveTeacher(@PathVariable(value = "role") @RequestParam(required = false) String role,
                                                   @RequestParam(defaultValue = "0") int page,
@@ -69,4 +79,5 @@ public class UserController {
 
         return new ResponseEntity<>(userService.retrieveAllTeachersInSch(name), FOUND);
     }
+
 }

@@ -1,5 +1,6 @@
 package com.decagon.rewardyourteacherapi.dto;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,7 @@ public class StudentDto {
     private String email;
 
     private String password;
+
 
     private String school;
 }
