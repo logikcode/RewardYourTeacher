@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.mail.MessagingException;
 
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.FOUND;
 
 @RestController
 @RequestMapping(value = "/api")
@@ -61,5 +62,11 @@ public class UserController {
                                                   @RequestParam(defaultValue = "0") int page,
                                                   @RequestParam(defaultValue = "5") int size) {
         return ResponseEntity.ok().body(userService.retrieveTeacher(Pageable.unpaged()));
+    }
+
+    @GetMapping(value = "/retrieve/all/teachers/by/{name}")
+    public ResponseEntity<Object> retrieveAllTeachersByName(@PathVariable("name") String name) {
+
+        return new ResponseEntity<>(userService.retrieveAllTeachersInSch(name), FOUND);
     }
 }
