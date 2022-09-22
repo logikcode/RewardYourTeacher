@@ -7,8 +7,7 @@ import lombok.Setter;
 import org.hibernate.Hibernate;
 
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import java.util.Objects;
 
 @Getter
@@ -16,13 +15,13 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name = "schools")
 public class School extends BaseClass {
-
-    private String schoolName;
-    private String schoolType;
-    private String schoolAddress;
-    private String schoolCity;
-    private String schoolState;
+   private String name;
+    private String type;
+    private String address;
+    private String city;
+    private String state;
 
 
 
