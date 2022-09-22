@@ -155,4 +155,15 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    public ResponseAPI< List<Teacher> > retrieveAllTeachersInSch(String schoolName){
+
+    Pageable pageable = PageRequest.of(0, 5, Sort.by("name").ascending());
+
+
+        List<Teacher> teacherList = teacherRepository.findAllBySchool(schoolName, pageable);
+
+        return new ResponseAPI<>("success", LocalDateTime.now(), teacherList);
+
+    }
+
 }
