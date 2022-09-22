@@ -75,7 +75,7 @@ public class SecurityConfig {
                 .antMatchers("/swagger-ui.html").permitAll()
                 .antMatchers("/v2/api-docs").permitAll()
                 .antMatchers("/webjars/**").permitAll()
-                .antMatchers("/authenticate" , "/teachers-registration" , "/students-registration", "/logout").permitAll()
+                .antMatchers("/authenticate" , "/teachers-registration" , "/students-registration", "/logout", "/login").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
