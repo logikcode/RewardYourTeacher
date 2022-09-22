@@ -1,6 +1,8 @@
-package com.example.rewardyourteachersq011bjavapode.exceptions;
+package com.decagon.rewardyourteacherapi.response;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter

@@ -9,6 +9,7 @@ import org.hibernate.Hibernate;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import java.util.Objects;
 
 @Getter
@@ -16,32 +17,22 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name = "schools")
 public class School extends BaseClass {
 
-    private String name;
+   private String name;
+    private String type;
+    private String address;
+    private String city;
+    private String state;
 
-
-    @OneToOne
-    @JoinColumn(name = "teacher_id", referencedColumnName = "id")
-    private Teacher teacher;
-
-    @OneToOne
-    @JoinColumn(name = "student_id", referencedColumnName = "id")
-    private Student student;
-
-   public School (String name, Teacher teacher) {
-       this.name = name;
-       this.teacher = teacher;
-   }
-
-   public School (String name, Student student) {
-       this.name = name;
-       this.student = student;
-   }
-
-    public School(String name) {
-        this.name = name;
-    }
+//    public School(String name, String type, String address, String city, String state) {
+//        this.name = name;
+//        this.type = type;
+//        this.address = address;
+//        this.city = city;
+//        this.state = state;
+//    }
 
     @Override
     public boolean equals(Object o) {

@@ -1,4 +1,4 @@
-package com.example.rewardyourteachersq011bjavapode.dto;
+package com.decagon.rewardyourteacherapi.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,8 @@ import lombok.Data;
 @AllArgsConstructor
 public class SchoolDTO {
     private String name;
+    private String type;
     private String address;
-    private String stateAndCountry;
-    private String schoolType;
+    private String city;
+    private String state;
 }
