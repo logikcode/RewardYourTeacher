@@ -1,11 +1,9 @@
 package com.decagon.rewardyourteacherapi.serviceImpl;
 
 import com.decagon.rewardyourteacherapi.dto.UserDTO;
-import com.decagon.rewardyourteacherapi.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.stereotype.Service;
-
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -23,9 +21,6 @@ import java.util.Properties;
 @Data
 @AllArgsConstructor
 public class MailService {
-
-
-
 
     public void sendEmail(UserDTO userDTO) throws MessagingException {
     Properties mailProperties = new Properties();
@@ -78,7 +73,7 @@ public class MailService {
 
         // Second part is image attachment
         messageBodyPart = new MimeBodyPart();
-        String filename = "/Users/decagon/Desktop/Reward-Your-Teacher-API-11B-JAVA-POD-D/src/main/resources/static/email.png";
+        String filename = "src/main/resources/static/email.png";
         DataSource source = new FileDataSource(new File(filename));
         messageBodyPart.setDataHandler(new DataHandler(source));
         messageBodyPart.setFileName(filename);
