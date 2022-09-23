@@ -1,6 +1,6 @@
 package com.decagon.rewardyourteacherapi.controller;
 
-import com.decagon.rewardyourteacherapi.dto.UserDTO;
+import com.decagon.rewardyourteacherapi.dto.UserDto;
 import com.decagon.rewardyourteacherapi.response.ResponseAPI;
 import com.decagon.rewardyourteacherapi.service.UserService;
 import com.decagon.rewardyourteacherapi.dto.StudentDto;
@@ -35,7 +35,7 @@ public class UserController {
 
         ResponseAPI<TeacherDto> teacherResponse = userService.TeacherSignUp(teacherDto);
 
-        UserDTO userDTO = new UserDTO();
+        UserDto userDTO = new UserDto();
         userDTO.setName(teacherDto.getName());
         userDTO.setEmail(teacherDto.getEmail());
 
@@ -48,7 +48,7 @@ public class UserController {
 
         ResponseAPI<StudentDto> studentResponse = userService.StudentSignUp(studentDto);
 
-        UserDTO userDTO = new UserDTO();
+        UserDto userDTO = new UserDto();
         userDTO.setName(studentDto.getName());
         userDTO.setEmail(studentDto.getEmail());
 

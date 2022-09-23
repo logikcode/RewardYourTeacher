@@ -1,6 +1,6 @@
 package com.decagon.rewardyourteacherapi.serviceImpl;
 
-import com.decagon.rewardyourteacherapi.dto.SchoolDTO;
+import com.decagon.rewardyourteacherapi.dto.SchoolDto;
 
 import com.decagon.rewardyourteacherapi.entity.School;
 import com.decagon.rewardyourteacherapi.repository.SchoolRepository;
@@ -33,7 +33,7 @@ public class SchoolServiceImpl implements SchoolService {
     @Override
    // @PostConstruct
     public void addSchool(String csvPath) {
-        List<SchoolDTO>schoolsToBeAdded = readAllSchoolsFromCsvFile(csvPath);
+        List<SchoolDto>schoolsToBeAdded = readAllSchoolsFromCsvFile(csvPath);
         List<School> schoolsInDatabase = schoolRepository.findAll();
         if(schoolsToBeAdded.size() > schoolsInDatabase.size()){
             schoolRepository.deleteAll();
