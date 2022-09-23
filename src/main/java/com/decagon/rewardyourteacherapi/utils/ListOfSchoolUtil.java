@@ -1,6 +1,6 @@
 package com.decagon.rewardyourteacherapi.utils;
 
-import com.decagon.rewardyourteacherapi.dto.SchoolDto;
+import com.decagon.rewardyourteacherapi.dto.SchoolResponseDto;
 import lombok.Data;
 
 import java.io.BufferedReader;
@@ -20,8 +20,8 @@ public class ListOfSchoolUtil {
     }
 
 
-    public static List<SchoolDto> readAllSchoolsFromCsvFile(String path){
-        List<SchoolDto> schools = new ArrayList<>();
+    public static List<SchoolResponseDto> readAllSchoolsFromCsvFile(String path){
+        List<SchoolResponseDto> schools = new ArrayList<>();
         try {
             reader = new BufferedReader(new FileReader(path));
             String[] data;
@@ -30,7 +30,7 @@ public class ListOfSchoolUtil {
                 while((line = reader.readLine()) != null){
                     data = line.split(",");
                    // System.out.println(Arrays.toString(data));
-                    SchoolDto schoolDTO =  new SchoolDto(data[0] , data[1] , data[2] , data[3], data[4]);
+                    SchoolResponseDto schoolDTO =  new SchoolResponseDto(data[0] , data[1] , data[2] , data[3], data[4]);
                     schools.add(schoolDTO);
                 }
             }

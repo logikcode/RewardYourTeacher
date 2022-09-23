@@ -13,7 +13,6 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,7 +22,7 @@ import java.util.UUID;
 public abstract class BaseClass implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) /* new change by Ifeoluwa */
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
 
@@ -32,9 +31,5 @@ public abstract class BaseClass implements Serializable {
 
     @UpdateTimestamp
     private LocalDateTime updateDate;
-
-    public BaseClass(Long id) {
-        this.id = id;
-    }
 
 }
