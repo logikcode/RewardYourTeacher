@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TransactionDTO {
+public class TransactionDto {
 
     private TransactionType transactionType;
     private Long amount;

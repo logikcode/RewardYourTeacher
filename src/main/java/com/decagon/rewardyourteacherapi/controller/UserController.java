@@ -1,6 +1,6 @@
 package com.decagon.rewardyourteacherapi.controller;
 
-import com.decagon.rewardyourteacherapi.dto.UserDTO;
+import com.decagon.rewardyourteacherapi.dto.UserDto;
 import com.decagon.rewardyourteacherapi.response.ResponseAPI;
 import com.decagon.rewardyourteacherapi.service.UserService;
 import com.decagon.rewardyourteacherapi.dto.StudentDto;
@@ -35,7 +35,7 @@ public class UserController {
 
         ResponseAPI<TeacherDto> teacherResponse = userService.TeacherSignUp(teacherDto);
 
-        UserDTO userDTO = new UserDTO();
+        UserDto userDTO = new UserDto();
         userDTO.setName(teacherDto.getName());
         userDTO.setEmail(teacherDto.getEmail());
 
@@ -48,7 +48,7 @@ public class UserController {
 
         ResponseAPI<StudentDto> studentResponse = userService.StudentSignUp(studentDto);
 
-        UserDTO userDTO = new UserDTO();
+        UserDto userDTO = new UserDto();
         userDTO.setName(studentDto.getName());
         userDTO.setEmail(studentDto.getEmail());
 
@@ -73,6 +73,11 @@ public class UserController {
         return ResponseEntity.ok().body(userService.retrieveTeacher(Pageable.unpaged()));
     }
 
+    @GetMapping(value = "/retrieve/all/teachers/by/{name}")
+    public ResponseEntity<Object> retrieveAllTeachersByName(@PathVariable("name") String name) {
+
+        return new ResponseEntity<>(userService.retrieveAllTeachersInSch(name), FOUND);
+    }
 @GetMapping(value = "/retrieve/balance/{id}")
 public ResponseEntity<?> currentUserBalance(@PathVariable(value = "id") Long id) {
         return new ResponseEntity<>(userService.userWalletBalance(id), OK);

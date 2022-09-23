@@ -1,11 +1,8 @@
 package com.decagon.rewardyourteacherapi.service;
 
-import com.decagon.rewardyourteacherapi.dto.SchoolDTO;
-import com.decagon.rewardyourteacherapi.entity.School;
 import com.decagon.rewardyourteacherapi.response.ResponseAPI;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 import java.util.Map;
 
 public interface SchoolService {

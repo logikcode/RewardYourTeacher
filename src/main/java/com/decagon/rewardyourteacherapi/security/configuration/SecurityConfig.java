@@ -42,7 +42,8 @@ public class SecurityConfig {
 
 
 
-    public SecurityConfig(JWTAuthenticationEntryPoint authenticationEntryPoint, CustomUserDetailsService customUserDetailsService, CustomOAuth2UserService oAuth2UserService, UserServiceImpl userService) {
+    public SecurityConfig(JWTAuthenticationEntryPoint authenticationEntryPoint, CustomUserDetailsService customUserDetailsService,
+                          CustomOAuth2UserService oAuth2UserService, UserServiceImpl userService) {
         this.authenticationEntryPoint = authenticationEntryPoint;
         this.customUserDetailsService = customUserDetailsService;
         this.oAuth2UserService = oAuth2UserService;
