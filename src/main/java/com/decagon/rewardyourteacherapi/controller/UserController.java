@@ -76,7 +76,7 @@ public class UserController {
         return ResponseEntity.ok().body(userService.retrieveTeacher(Pageable.unpaged()));
     }
     /* reworked paginated teachers */
-    @GetMapping( value = "/retrieve/teachers/all/{schoolName}/{pageNo}/{pageSize}")
+    @GetMapping( value = "/retrieve/teachers/by/{schoolName}/{pageNo}/{pageSize}")
     public ResponseEntity<Page<Teacher>> retrieveAllTeachersInASchool(@PathVariable("schoolName") String schoolName,
                                                       @PathVariable("pageNo") int pageNo,
                                                       @PathVariable("pageSize") int pageSize){
