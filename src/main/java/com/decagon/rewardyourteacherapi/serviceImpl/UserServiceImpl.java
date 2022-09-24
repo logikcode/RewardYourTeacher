@@ -279,14 +279,11 @@ public class UserServiceImpl implements UserService {
         return new ResponseAPI<>("success", LocalDateTime.now(), walletBallance);
     }
 
-    public ResponseAPI< List<Teacher> > retrieveAllTeachersInSch(String schoolName){
+    @Override
+    public Page<Teacher> retrieveAllTeachersBySchoolName(String schoolName, int pageNo, int pageSize) {
 
-    Pageable pageable = PageRequest.of(0, 5, Sort.by("name").ascending());
-
-
-        List<Teacher> teacherList = teacherRepository.findAllBySchool(schoolName, pageable);
-
-        return new ResponseAPI<>("success", LocalDateTime.now(), teacherList);
+        Pageable pageable = PageRequest.of(pageNo, pageSize).withSort(Sort.by("name"));
+      return teacherRepository.findAllBySchoolIgnoreCase(schoolName, pageable);
 
     }
 
