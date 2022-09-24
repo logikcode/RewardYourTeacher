@@ -1,13 +1,16 @@
 package com.decagon.rewardyourteacherapi.controller;
 
 import com.decagon.rewardyourteacherapi.dto.UserDto;
+import com.decagon.rewardyourteacherapi.entity.Teacher;
 import com.decagon.rewardyourteacherapi.response.ResponseAPI;
 import com.decagon.rewardyourteacherapi.service.UserService;
 import com.decagon.rewardyourteacherapi.dto.StudentDto;
 import com.decagon.rewardyourteacherapi.dto.TeacherDto;
 import com.decagon.rewardyourteacherapi.serviceImpl.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import javax.mail.MessagingException;
@@ -72,12 +75,17 @@ public class UserController {
                                                   @RequestParam(defaultValue = "5") int size) {
         return ResponseEntity.ok().body(userService.retrieveTeacher(Pageable.unpaged()));
     }
+    /* reworked paginated teachers */
+    @GetMapping( value = "/retrieve/teachers/all/{schoolName}/{pageNo}/{pageSize}")
+    public ResponseEntity<Page<Teacher>> retrieveAllTeachersInASchool(@PathVariable("schoolName") String schoolName,
+                                                      @PathVariable("pageNo") int pageNo,
+                                                      @PathVariable("pageSize") int pageSize){
 
-    @GetMapping(value = "/retrieve/all/teachers/by/{name}")
-    public ResponseEntity<Object> retrieveAllTeachersByName(@PathVariable("name") String name) {
-
-        return new ResponseEntity<>(userService.retrieveAllTeachersInSch(name), FOUND);
+        System.out.println("PATH VARIABLE VALUE: "+ schoolName);
+        Page <Teacher> teacherPage = userService.retrieveAllTeachersBySchoolName(schoolName, pageNo, pageSize);
+        return new ResponseEntity<>(teacherPage, FOUND);
     }
+
 @GetMapping(value = "/retrieve/balance/{id}")
 public ResponseEntity<?> currentUserBalance(@PathVariable(value = "id") Long id) {
         return new ResponseEntity<>(userService.userWalletBalance(id), OK);
