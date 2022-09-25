@@ -1,6 +1,6 @@
 package com.decagon.rewardyourteacherapi.controller;
 
-import com.decagon.rewardyourteacherapi.dto.UserDTO;
+import com.decagon.rewardyourteacherapi.dto.UserDto;
 import com.decagon.rewardyourteacherapi.response.ResponseAPI;
 import com.decagon.rewardyourteacherapi.service.UserService;
 import com.decagon.rewardyourteacherapi.dto.StudentDto;
@@ -10,10 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import javax.mail.MessagingException;
-
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.FOUND;
 
 @RestController
 @RequestMapping(value = "/api")
@@ -35,7 +35,7 @@ public class UserController {
 
         ResponseAPI<TeacherDto> teacherResponse = userService.TeacherSignUp(teacherDto);
 
-        UserDTO userDTO = new UserDTO();
+        UserDto userDTO = new UserDto();
         userDTO.setName(teacherDto.getName());
         userDTO.setEmail(teacherDto.getEmail());
 
@@ -48,12 +48,22 @@ public class UserController {
 
         ResponseAPI<StudentDto> studentResponse = userService.StudentSignUp(studentDto);
 
-        UserDTO userDTO = new UserDTO();
+        UserDto userDTO = new UserDto();
         userDTO.setName(studentDto.getName());
         userDTO.setEmail(studentDto.getEmail());
 
         mailService.sendEmail(userDTO);
         return new ResponseEntity<>(studentResponse, CREATED);
+    }
+
+    @GetMapping(value = "/view/teacher/{id}")
+    public ResponseEntity<Object> viewParticularTeacher(@PathVariable("id") long id) {
+        return new ResponseEntity<>(userService.viewTeacher(id), FOUND);
+    }
+
+    @GetMapping(value = "/search/teacher/{name}")
+    public ResponseEntity<Object> searchForTeacher(@PathVariable("name") String name) {
+        return new ResponseEntity<>(userService.searchForTeacher(name), FOUND);
     }
 
     @GetMapping(value = "/retrieve_teacher")
@@ -62,4 +72,16 @@ public class UserController {
                                                   @RequestParam(defaultValue = "5") int size) {
         return ResponseEntity.ok().body(userService.retrieveTeacher(Pageable.unpaged()));
     }
+
+    @GetMapping(value = "/retrieve/all/teachers/by/{name}")
+    public ResponseEntity<Object> retrieveAllTeachersByName(@PathVariable("name") String name) {
+
+        return new ResponseEntity<>(userService.retrieveAllTeachersInSch(name), FOUND);
+    }
+@GetMapping(value = "/retrieve/balance/{id}")
+public ResponseEntity<?> currentUserBalance(@PathVariable(value = "id") Long id) {
+        return new ResponseEntity<>(userService.userWalletBalance(id), OK);
+
+}
+
 }

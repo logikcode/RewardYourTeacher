@@ -12,8 +12,4 @@ import javax.persistence.*;
 @DiscriminatorValue(value = "student")
 public class Student extends User {
 
-
-    public Student(Long id, String name, String email, String password, Roles role, String school) {
-        super(id, name, email, password, role, school);
-    }
 }

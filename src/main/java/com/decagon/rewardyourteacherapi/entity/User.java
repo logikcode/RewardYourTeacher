@@ -81,12 +81,4 @@ public class User extends BaseClass {
                 '}';
     }
 
-    public User(Long id, String name, String email, String password, Roles role, String school) {
-        super(id);
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-        this.school = school;
-    }
 }

@@ -72,9 +72,5 @@ class AuthControllerTest {
                 .andExpect(MockMvcResultMatchers.content().string("{\"accessToken\":\"ABC123\",\"tokenType\":\"Bearer\"}"));
     }
 
-
-
-
-
 }
 

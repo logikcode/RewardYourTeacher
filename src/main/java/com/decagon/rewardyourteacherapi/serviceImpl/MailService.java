@@ -1,11 +1,9 @@
 package com.decagon.rewardyourteacherapi.serviceImpl;
 
-import com.decagon.rewardyourteacherapi.dto.UserDTO;
-import com.decagon.rewardyourteacherapi.entity.User;
+import com.decagon.rewardyourteacherapi.dto.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.stereotype.Service;
-
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -24,7 +22,7 @@ import java.util.Properties;
 @AllArgsConstructor
 public class MailService {
 
-    public void sendEmail(UserDTO userDTO) throws MessagingException {
+    public void sendEmail(UserDto userDTO) throws MessagingException {
     Properties mailProperties = new Properties();
         mailProperties.put("mail.smtp.auth", true);
         mailProperties.put("mail.smtp.starttls.enable", "true");
@@ -46,7 +44,7 @@ public class MailService {
 
 
 
-    public void createEmail(UserDTO userDTO, Session session) throws MessagingException {
+    public void createEmail(UserDto userDTO, Session session) throws MessagingException {
         String mailSubject = "Welcome to RewardYourTeacher";
         System.out.println("before get name");
         String emailBody = "Hello " + userDTO.getName() + "\n"
@@ -76,7 +74,6 @@ public class MailService {
         // Second part is image attachment
         messageBodyPart = new MimeBodyPart();
         String filename = "src/main/resources/static/email.png";
-
         DataSource source = new FileDataSource(new File(filename));
         messageBodyPart.setDataHandler(new DataHandler(source));
         messageBodyPart.setFileName(filename);

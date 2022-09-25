@@ -42,7 +42,8 @@ public class SecurityConfig {
 
 
 
-    public SecurityConfig(JWTAuthenticationEntryPoint authenticationEntryPoint, CustomUserDetailsService customUserDetailsService, CustomOAuth2UserService oAuth2UserService, UserServiceImpl userService) {
+    public SecurityConfig(JWTAuthenticationEntryPoint authenticationEntryPoint, CustomUserDetailsService customUserDetailsService,
+                          CustomOAuth2UserService oAuth2UserService, UserServiceImpl userService) {
         this.authenticationEntryPoint = authenticationEntryPoint;
         this.customUserDetailsService = customUserDetailsService;
         this.oAuth2UserService = oAuth2UserService;
@@ -75,7 +76,7 @@ public class SecurityConfig {
                 .antMatchers("/swagger-ui.html").permitAll()
                 .antMatchers("/v2/api-docs").permitAll()
                 .antMatchers("/webjars/**").permitAll()
-                .antMatchers("/authenticate" , "/teachers-registration" , "/students-registration", "/logout").permitAll()
+                .antMatchers("/authenticate" , "/teachers-registration" , "/students-registration", "/logout", "/login").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
