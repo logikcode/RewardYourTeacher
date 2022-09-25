@@ -4,7 +4,6 @@ package com.decagon.rewardyourteacherapi.controller;
 import com.decagon.rewardyourteacherapi.entity.Transaction;
 import com.decagon.rewardyourteacherapi.response.PaymentResponse;
 import com.decagon.rewardyourteacherapi.response.TransactionResponse;
-import com.decagon.rewardyourteacherapi.service.TransactionService;
 import com.decagon.rewardyourteacherapi.serviceImpl.TransactionServiceImpl;
 import com.decagon.rewardyourteacherapi.utils.PaymentRequest;
 import org.springframework.beans.factory.annotation.Autowired;
