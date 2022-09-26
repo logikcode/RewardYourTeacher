@@ -2,8 +2,10 @@ package com.decagon.rewardyourteacherapi.service;
 
 import com.decagon.rewardyourteacherapi.dto.StudentDto;
 import com.decagon.rewardyourteacherapi.dto.TeacherDto;
+import com.decagon.rewardyourteacherapi.dto.TeacherResponseDto;
 import com.decagon.rewardyourteacherapi.entity.Teacher;
 import com.decagon.rewardyourteacherapi.response.ResponseAPI;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
@@ -20,8 +22,8 @@ public interface UserService {
 
     ResponseAPI<List<TeacherDto>> searchForTeacher(String name);
 
-    ResponseAPI<Map<String, Object>> retrieveTeacher(Pageable pageable);
+    List<TeacherResponseDto> retrieveTeacher(int page, int size);
 
-   ResponseAPI<List<Teacher>> retrieveAllTeachersInSch(String schoolName);
+   List<TeacherResponseDto> retrieveAllTeachersBySchool(String schoolName, int pageNo, int pageSize);
     ResponseAPI<BigDecimal> userWalletBalance(Long id);
 }

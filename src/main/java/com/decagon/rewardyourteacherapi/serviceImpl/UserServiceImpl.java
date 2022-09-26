@@ -1,6 +1,7 @@
 package com.decagon.rewardyourteacherapi.serviceImpl;
 
 
+import com.decagon.rewardyourteacherapi.dto.TeacherResponseDto;
 import com.decagon.rewardyourteacherapi.entity.*;
 import com.decagon.rewardyourteacherapi.enums.Provider;
 import com.decagon.rewardyourteacherapi.exception.UserNotFoundException;
@@ -17,6 +18,7 @@ import com.decagon.rewardyourteacherapi.repository.TeacherRepository;
 import com.decagon.rewardyourteacherapi.repository.UserRepository;
 import com.decagon.rewardyourteacherapi.repository.WalletRepository;
 import com.decagon.rewardyourteacherapi.security.jwt.JWTTokenProvider;
+import com.decagon.rewardyourteacherapi.utils.TeacherMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -210,21 +212,17 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    public ResponseAPI<Map<String, Object>> retrieveTeacher(Pageable pageable) {
+    public List<TeacherResponseDto> retrieveTeacher(int page, int size) {
         List<Teacher> users;
-        Pageable firstPageWithFiveElements = PageRequest.of(0, 5, Sort.by("name").descending());
+        Pageable firstPageWithFiveElements = PageRequest.of(page, size, Sort.by("name").ascending());
         Page<Teacher> userPage;
 
         userPage = teacherRepository.findAll(firstPageWithFiveElements);
 
         users = userPage.getContent();
-        Map<String, Object> response = new HashMap<>();
-        response.put("users", users);
-        response.put("currentPage", userPage.getNumber());
-        response.put("totalItems", userPage.getTotalElements());
-        response.put("totalPages", userPage.getTotalPages());
 
-        return new ResponseAPI<>("Success", LocalDateTime.now(), response);
+
+        return convertTeachersToResponseDto(users);
     }
 
 
@@ -279,15 +277,29 @@ public class UserServiceImpl implements UserService {
         return new ResponseAPI<>("success", LocalDateTime.now(), walletBallance);
     }
 
-    public ResponseAPI< List<Teacher> > retrieveAllTeachersInSch(String schoolName){
+    public  List<TeacherResponseDto> retrieveAllTeachersBySchool(String school, int pageNo, int pageSize){
 
-    Pageable pageable = PageRequest.of(0, 5, Sort.by("name").ascending());
+    Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("name").ascending());
+    Page<Teacher> teachers = teacherRepository.findAllBySchool(school, pageable);
 
+    List<Teacher> teacherList = teachers.getContent();
 
-        List<Teacher> teacherList = teacherRepository.findAllBySchool(schoolName, pageable);
+        return  convertTeachersToResponseDto(teacherList);
 
-        return new ResponseAPI<>("success", LocalDateTime.now(), teacherList);
+    }
 
+    public List<TeacherResponseDto> convertTeachersToResponseDto(List<Teacher> teachers){
+
+        List<TeacherResponseDto> teacherResponseDtoList = new ArrayList<>();
+
+        teachers.forEach(teacher -> {
+            TeacherMapper mapper = new TeacherMapper();
+            TeacherResponseDto teacherResponseDto =  mapper.teacherEntityToTeacherResponseDtoMapper(teacher);
+            teacherResponseDtoList.add(teacherResponseDto);
+
+        });
+
+        return teacherResponseDtoList;
     }
 
 }

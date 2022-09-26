@@ -18,7 +18,7 @@ public class TeacherDto {
     private String name;
 
     private String email;
-
+    @JsonIgnore
     private String password;
 
     private String school;
