@@ -2,6 +2,7 @@ package com.decagon.rewardyourteacherapi.service;
 
 import com.decagon.rewardyourteacherapi.dto.StudentDto;
 import com.decagon.rewardyourteacherapi.dto.TeacherDto;
+import com.decagon.rewardyourteacherapi.entity.Notification;
 import com.decagon.rewardyourteacherapi.entity.Teacher;
 import com.decagon.rewardyourteacherapi.response.ResponseAPI;
 import org.springframework.data.domain.Page;
@@ -26,4 +27,6 @@ public interface UserService {
     ResponseAPI<BigDecimal> userWalletBalance(Long id);
 
     Page<Teacher> retrieveAllTeachersBySchoolName(String schoolName, int pageNo, int pageSize);
+
+    Page<Notification> retrieveNotifications(Long userId);
 }

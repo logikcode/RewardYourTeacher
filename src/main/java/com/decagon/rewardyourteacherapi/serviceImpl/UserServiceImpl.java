@@ -48,21 +48,23 @@ public class UserServiceImpl implements UserService {
 
     private final StudentRepository studentRepository;
 
-
+    private final NotificationRepository notificationRepository;
     private PasswordEncoder passwordEncoder;
 
 
     private final JWTTokenProvider jwtTokenProvider;
 
     @Autowired
-    public UserServiceImpl(WalletRepository walletRepository, UserRepository userRepository, SubjectsRepository subjectsRepository, TeacherRepository teacherRepository, StudentRepository studentRepository, JWTTokenProvider jwtTokenProvider) {
+    public UserServiceImpl(WalletRepository walletRepository, UserRepository userRepository, SubjectsRepository subjectsRepository,
+                           TeacherRepository teacherRepository, StudentRepository studentRepository,
+                           JWTTokenProvider jwtTokenProvider, NotificationRepository notificationRepository) {
         this.userRepository = userRepository;
         this.subjectsRepository = subjectsRepository;
         this.teacherRepository = teacherRepository;
         this.studentRepository = studentRepository;
         this.jwtTokenProvider = jwtTokenProvider;
         this.walletRepository = walletRepository;
-
+        this.notificationRepository = notificationRepository;
     }
 
     @Override
@@ -285,6 +287,12 @@ public class UserServiceImpl implements UserService {
         Pageable pageable = PageRequest.of(pageNo, pageSize).withSort(Sort.by("name"));
       return teacherRepository.findAllBySchoolIgnoreCase(schoolName, pageable);
 
+    }
+
+    @Override
+    public Page<Notification> retrieveNotifications(Long userId) {
+        Pageable pageable = PageRequest.of(0, 5);
+        return notificationRepository.findAllByUser_Id(userId,pageable);
     }
 
 }

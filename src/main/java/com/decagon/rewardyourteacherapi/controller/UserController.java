@@ -1,6 +1,7 @@
 package com.decagon.rewardyourteacherapi.controller;
 
 import com.decagon.rewardyourteacherapi.dto.UserDto;
+import com.decagon.rewardyourteacherapi.entity.Notification;
 import com.decagon.rewardyourteacherapi.entity.Teacher;
 import com.decagon.rewardyourteacherapi.response.ResponseAPI;
 import com.decagon.rewardyourteacherapi.service.UserService;
@@ -90,6 +91,12 @@ public class UserController {
 public ResponseEntity<?> currentUserBalance(@PathVariable(value = "id") Long id) {
         return new ResponseEntity<>(userService.userWalletBalance(id), OK);
 
+}
+
+@GetMapping(value = "/retrieve/notifications/{userId}")
+public ResponseEntity<Page<Notification>> retrieveUserNotifications(@PathVariable("userId") Long id){
+       Page<Notification> userNotifications = userService.retrieveNotifications(id);
+       return new ResponseEntity<>(userNotifications, FOUND);
 }
 
 }
