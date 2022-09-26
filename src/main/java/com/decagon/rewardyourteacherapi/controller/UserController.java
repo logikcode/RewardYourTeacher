@@ -1,5 +1,6 @@
 package com.decagon.rewardyourteacherapi.controller;
 
+import com.decagon.rewardyourteacherapi.dto.TeacherResponseDto;
 import com.decagon.rewardyourteacherapi.dto.UserDto;
 import com.decagon.rewardyourteacherapi.entity.Notification;
 import com.decagon.rewardyourteacherapi.entity.Teacher;
@@ -15,6 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import javax.mail.MessagingException;
+import java.util.List;
+
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.HttpStatus.FOUND;
@@ -34,7 +37,7 @@ public class UserController {
         this.mailService = mailService;
     }
 
-    @PostMapping(value = "/teachers-registration")
+    @PostMapping(value = "/teachers/registration")
     public ResponseEntity<Object> teacherRegistration(@RequestBody TeacherDto teacherDto) throws MessagingException {
 
         ResponseAPI<TeacherDto> teacherResponse = userService.TeacherSignUp(teacherDto);
@@ -44,10 +47,10 @@ public class UserController {
         userDTO.setEmail(teacherDto.getEmail());
 
         mailService.sendEmail(userDTO);
-        return new ResponseEntity<>(teacherResponse, CREATED);
+        return new ResponseEntity<>("Registration successful" + "\n" + "welcome " + userDTO.getName(), CREATED);
     }
 
-    @PostMapping(value = "/students-registration")
+    @PostMapping(value = "/students/registration")
     public ResponseEntity<Object> studentRegistration(@RequestBody StudentDto studentDto) throws MessagingException {
 
         ResponseAPI<StudentDto> studentResponse = userService.StudentSignUp(studentDto);
@@ -57,7 +60,7 @@ public class UserController {
         userDTO.setEmail(studentDto.getEmail());
 
         mailService.sendEmail(userDTO);
-        return new ResponseEntity<>(studentResponse, CREATED);
+        return new ResponseEntity<>("Registration successful" + "\n" + "welcome " + userDTO.getName(), CREATED);
     }
 
     @GetMapping(value = "/view/teacher/{id}")
@@ -70,21 +73,21 @@ public class UserController {
         return new ResponseEntity<>(userService.searchForTeacher(name), FOUND);
     }
 
-    @GetMapping(value = "/retrieve_teacher")
-    public ResponseEntity<Object> retrieveTeacher(@PathVariable(value = "role") @RequestParam(required = false) String role,
-                                                  @RequestParam(defaultValue = "0") int page,
-                                                  @RequestParam(defaultValue = "5") int size) {
-        return ResponseEntity.ok().body(userService.retrieveTeacher(Pageable.unpaged()));
+    @GetMapping(value = "/retrieve/teachers/{page}/{size}")
+    public ResponseEntity<Object> retrieveTeacher(
+                                                  @PathVariable("page") int page,
+                                                  @PathVariable("size") int size) {
+        return ResponseEntity.ok().body(userService.retrieveTeacher(page, size));
     }
-    /* reworked paginated teachers */
-    @GetMapping( value = "/retrieve/teachers/by/{schoolName}/{pageNo}/{pageSize}")
-    public ResponseEntity<Page<Teacher>> retrieveAllTeachersInASchool(@PathVariable("schoolName") String schoolName,
-                                                      @PathVariable("pageNo") int pageNo,
-                                                      @PathVariable("pageSize") int pageSize){
 
-        System.out.println("PATH VARIABLE VALUE: "+ schoolName);
-        Page <Teacher> teacherPage = userService.retrieveAllTeachersBySchoolName(schoolName, pageNo, pageSize);
-        return new ResponseEntity<>(teacherPage, FOUND);
+    @GetMapping(value = "/retrieve/teachers/{schoolName}/{pageNo}/{pageSize}")
+    public ResponseEntity<List<TeacherResponseDto>> retrieveAllTeachersInASchool(@PathVariable("schoolName") String school,
+                                                               @PathVariable("pageNo") int pageNo,
+                                                               @PathVariable("pageSize") int pageSize) {
+
+        List<TeacherResponseDto> teachers = userService.retrieveAllTeachersBySchool(school, pageNo, pageSize);
+        return new ResponseEntity<>(teachers, FOUND);
+
     }
 
 @GetMapping(value = "/retrieve/balance/{id}")

@@ -12,10 +12,11 @@ import java.util.Optional;
 public interface TeacherRepository extends JpaRepository<Teacher , Long> {
     List<Teacher> findAllByName(String name);
 
-   // List<Teacher> findAllBySchool(String school, Pageable pageable);
-    Page<Teacher> findAllBySchoolIgnoreCase(String schoolName, Pageable pageable);
+   Page<Teacher> findAllBySchool(String school, Pageable pageable);
 
     Optional<Teacher> findTeacherByEmail(String email);
+
+    Page<Teacher> findAll(Pageable pageable);
 }
 
 

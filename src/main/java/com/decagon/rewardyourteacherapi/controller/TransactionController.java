@@ -4,7 +4,7 @@ package com.decagon.rewardyourteacherapi.controller;
 import com.decagon.rewardyourteacherapi.entity.Transaction;
 import com.decagon.rewardyourteacherapi.response.PaymentResponse;
 import com.decagon.rewardyourteacherapi.response.TransactionResponse;
-import com.decagon.rewardyourteacherapi.service.TransactionService;
+import com.decagon.rewardyourteacherapi.serviceImpl.TransactionServiceImpl;
 import com.decagon.rewardyourteacherapi.utils.PaymentRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,12 +27,12 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api/users")
 public class TransactionController {
-    private final TransactionService transactionService;
+    private final TransactionServiceImpl transactionService;
     private PaymentResponse paymentResponse = new PaymentResponse();
 
 
     @Autowired
-    public TransactionController(TransactionService transactionService) {
+    public TransactionController(TransactionServiceImpl transactionService) {
         this.transactionService = transactionService;
     }
     @PostMapping(value = "/deposit")
